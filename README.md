@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🇪🇹 Ethiopian Salary Calculator
 
 A professional, feature-rich salary calculator for Ethiopian employees with beautiful PDF export functionality and percentage-based allowance calculations.
@@ -139,3 +140,7 @@ If you have any questions or need help, please open an issue on GitHub.
 ---
 
 **Made with ❤️ for the Ethiopian workforce**
+=======
+# ethiopian-salary-calculator
+Professional Ethiopian Salary Calculator with PDF Export and Percentage-based Allowances
+>>>>>>> 9564842c4b344d7880ed63397759d06c07448c1b
