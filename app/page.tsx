@@ -20,16 +20,16 @@ import { PercentageInput } from "@/components/percentage-input"
 
 export default function EthiopianSalaryCalculator() {
   const [inputs, setInputs] = useState<SalaryInputs>({
-    grossSalary: 15000,
-    transportAllowance: 2000,
+    grossSalary: 0,
+    transportAllowance: 0,
     transportTaxable: false,
-    transportPercentage: 13.33, // 2000/15000 * 100
-    housingAllowance: 3000,
-    housingTaxable: true,
-    housingPercentage: 20, // 3000/15000 * 100
-    medicalAllowance: 1000,
+    transportPercentage: 0,
+    housingAllowance: 0,
+    housingTaxable: false,
+    housingPercentage: 0,
+    medicalAllowance: 0,
     medicalTaxable: false,
-    medicalPercentage: 6.67, // 1000/15000 * 100
+    medicalPercentage: 0,
     otherAllowances: [],
     overtimePay: 0,
     unionDues: 0,
@@ -149,7 +149,7 @@ export default function EthiopianSalaryCalculator() {
                         value={inputs.grossSalary}
                         onChange={(e) => handleNumberInput("grossSalary", e.target.value)}
                         className={`text-lg font-semibold ${errors.grossSalary ? "border-destructive" : ""}`}
-                        placeholder="15,000"
+                        placeholder="0"
                         min="0"
                       />
                       {errors.grossSalary && <p className="text-sm text-destructive mt-1">{errors.grossSalary}</p>}
@@ -177,7 +177,7 @@ export default function EthiopianSalaryCalculator() {
                       onTaxableChange={(taxable) => updateInput("transportTaxable", taxable)}
                       baseSalary={inputs.grossSalary}
                       isAmharic={isAmharic}
-                      placeholder="2,000"
+                      placeholder="0"
                     />
 
                     {/* Housing Allowance */}
@@ -191,7 +191,7 @@ export default function EthiopianSalaryCalculator() {
                       onTaxableChange={(taxable) => updateInput("housingTaxable", taxable)}
                       baseSalary={inputs.grossSalary}
                       isAmharic={isAmharic}
-                      placeholder="3,000"
+                      placeholder="0"
                     />
 
                     {/* Medical Allowance */}
@@ -205,7 +205,7 @@ export default function EthiopianSalaryCalculator() {
                       onTaxableChange={(taxable) => updateInput("medicalTaxable", taxable)}
                       baseSalary={inputs.grossSalary}
                       isAmharic={isAmharic}
-                      placeholder="1,000"
+                      placeholder="0"
                     />
                   </CardContent>
                 </Card>
