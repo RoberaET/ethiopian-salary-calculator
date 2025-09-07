@@ -113,7 +113,7 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
           <p className="text-lg text-muted-foreground">{isAmharic ? "የተጣራ ደመወዝ" : "Net Take-Home Pay"}</p>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
             <div>
               <p className="text-2xl font-semibold text-secondary">
                 {formatCurrency(dailyGrossSalary)}

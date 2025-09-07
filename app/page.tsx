@@ -86,15 +86,15 @@ export default function EthiopianSalaryCalculator() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        <div className="container mx-auto px-4 py-3 sm:py-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 min-w-0">
               <img
                 src="/images/ReactorTech.png"
                 alt={isAmharic ? "ሎጎ" : "Site logo"}
                 width={48}
                 height={48}
-                className="h-12 w-12 rounded-lg object-contain"
+                className="h-8 w-8 sm:h-12 sm:w-12 rounded-lg object-contain"
                 loading="eager"
                 decoding="async"
               />
@@ -103,20 +103,20 @@ export default function EthiopianSalaryCalculator() {
                 alt={isAmharic ? "የኢትዮጵያ ባንዲራ" : "Ethiopian flag"}
                 width={44}
                 height={44}
-                className="rounded-sm"
+                className="h-8 w-8 sm:h-11 sm:w-11 rounded-sm"
                 loading="eager"
                 decoding="async"
               />
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-2xl font-bold text-foreground leading-tight break-words">
                   {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር 2025 - የተጣራ ደመወዝ እና የገቢ ታክስ ካልኩሌተር" : "Ethiopian Salary Calculator 2025 - Calculate Your Net Pay & Income Tax"}
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="hidden sm:block text-sm text-muted-foreground">
                   {isAmharic ? "የተጣራ ደመወዝዎን ያስሉ" : "Calculate Your Take-Home Pay"}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
               <div className="flex items-center gap-2">
                 <Label htmlFor="language-toggle" className="text-sm">
                   {isAmharic ? "English" : "አማርኛ"}
@@ -160,16 +160,16 @@ export default function EthiopianSalaryCalculator() {
             />
 
             <Tabs defaultValue="basic" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="basic" className="flex items-center gap-2 data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
+              <TabsList className="grid w-full grid-cols-3 overflow-x-auto whitespace-nowrap">
+                <TabsTrigger value="basic" className="flex items-center gap-2 text-xs sm:text-sm data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
                   <DollarSign className="h-4 w-4" />
                   {isAmharic ? "መሰረታዊ" : "Basic"}
                 </TabsTrigger>
-                <TabsTrigger value="allowances" className="flex items-center gap-2 data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
+                <TabsTrigger value="allowances" className="flex items-center gap-2 text-xs sm:text-sm data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
                   <Settings className="h-4 w-4" />
                   {isAmharic ? "አበሎች" : "Allowances"}
                 </TabsTrigger>
-                <TabsTrigger value="deductions" className="flex items-center gap-2 data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
+                <TabsTrigger value="deductions" className="flex items-center gap-2 text-xs sm:text-sm data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
                   <FileText className="h-4 w-4" />
                   {isAmharic ? "ቅናሾች" : "Deductions"}
                 </TabsTrigger>
@@ -366,20 +366,20 @@ export default function EthiopianSalaryCalculator() {
           <div className="space-y-6">
             {/* Results Tabs */}
             <Tabs defaultValue="breakdown" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="breakdown" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
+              <TabsList className="grid w-full grid-cols-4 overflow-x-auto whitespace-nowrap">
+                <TabsTrigger value="breakdown" className="flex items-center gap-1 text-[11px] sm:text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <FileText className="h-3 w-3" />
                   {isAmharic ? "ዝርዝር" : "Details"}
                 </TabsTrigger>
-                <TabsTrigger value="visualization" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
+                <TabsTrigger value="visualization" className="flex items-center gap-1 text-[11px] sm:text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <BarChart3 className="h-3 w-3" />
                   {isAmharic ? "ምስላዊ" : "Visual"}
                 </TabsTrigger>
-                <TabsTrigger value="whatif" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
+                <TabsTrigger value="whatif" className="flex items-center gap-1 text-[11px] sm:text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <Zap className="h-3 w-3" />
                   {isAmharic ? "ምን ቢሆን" : "What-If"}
                 </TabsTrigger>
-                <TabsTrigger value="export" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
+                <TabsTrigger value="export" className="flex items-center gap-1 text-[11px] sm:text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <Share2 className="h-3 w-3" />
                   {isAmharic ? "ማጋራት" : "Share"}
                 </TabsTrigger>
