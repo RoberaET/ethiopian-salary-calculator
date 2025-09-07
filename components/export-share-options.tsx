@@ -97,7 +97,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
         setShowEmailPopup(false)
         setRecipient("")
         setSentOk(false)
-      }, 1200)
+      }, 10000)
     } catch (e: any) {
       setSendError(e.message || 'Failed to send')
     } finally {
@@ -340,7 +340,12 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
                 placeholder={isAmharic ? "name@example.com" : "name@example.com"}
               />
               {sendError && <p className="text-xs text-destructive">{sendError}</p>}
-              {sentOk && <p className="text-xs text-green-600">{isAmharic ? "ተልኳል" : "Sent"}</p>}
+              {sentOk && (
+                <p className="text-xs text-green-600">
+                  {isAmharic ? "ተልኳል" : "Sent"}
+                  <span className="text-muted-foreground"> {isAmharic ? "— ካልታገኙ በSpam/Junk ይፈትሹ" : " — if not found, check your Spam/Junk folder"}</span>
+                </p>
+              )}
             </div>
             <div className="mt-4 flex items-center justify-end gap-2">
               <Button type="button" variant="ghost" onClick={() => setShowEmailPopup(false)} disabled={sending}>{isAmharic ? "ይቅር" : "Cancel"}</Button>
