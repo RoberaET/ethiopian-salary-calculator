@@ -47,6 +47,9 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
   const estimatedExpenses = calculation.netSalary * 0.7 // Assume 70% for expenses
   const potentialSavings = calculation.netSalary - estimatedExpenses
   const savingsRate = (potentialSavings / calculation.netSalary) * 100
+  const dailyGrossSalary = (calculation.grossSalary + inputs.overtimePay) / 30
+  const dailyTax = calculation.incomeTax / 30
+  const dailyNetIncome = calculation.netSalary / 30
 
   // Spotlight hover effect for top card
   const mouseX = useMotionValue(0)
@@ -110,16 +113,22 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
           <p className="text-lg text-muted-foreground">{isAmharic ? "የተጣራ ደመወዝ" : "Net Take-Home Pay"}</p>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className="grid grid-cols-2 gap-4 text-center">
+          <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-2xl font-semibold text-secondary">
-                {(calculation.effectiveTaxRate * 100).toFixed(1)}%
+                {formatCurrency(dailyGrossSalary)}
               </p>
-              <p className="text-xs text-muted-foreground">{isAmharic ? "ውጤታማ ታክስ" : "Effective Tax Rate"}</p>
+              <p className="text-xs text-muted-foreground">{isAmharic ? "የቀን ጠቅላላ ደመወዝ (÷30)" : "Daily Gross (÷30)"}</p>
             </div>
             <div>
-              <p className="text-2xl font-semibold text-accent">{savingsRate.toFixed(0)}%</p>
-              <p className="text-xs text-muted-foreground">{isAmharic ? "የቁጠባ አቅም" : "Savings Potential"}</p>
+              <p className="text-2xl font-semibold text-accent">{formatCurrency(dailyTax)}</p>
+              <p className="text-xs text-muted-foreground">{isAmharic ? "የቀን ታክስ" : "Daily Tax"}</p>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-primary">
+                {formatCurrency(dailyNetIncome)}
+              </p>
+              <p className="text-xs text-muted-foreground">{isAmharic ? "የቀን የተጣራ ደመወዝ (÷30)" : "Daily Net Income (÷30)"}</p>
             </div>
           </div>
         </CardContent>

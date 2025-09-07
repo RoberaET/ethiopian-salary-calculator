@@ -191,11 +191,11 @@ export function calculateSalary(inputs: SalaryInputs): SalaryCalculation {
   // The 600 Birr exemption is applied to each allowance that has its taxable toggle ON
   
   const taxableIncome = inputs.grossSalary + 
-    (inputs.housingTaxable ? Math.max(0, inputs.housingAllowance - 600) : inputs.housingAllowance) +
-    (inputs.medicalTaxable ? Math.max(0, inputs.medicalAllowance - 600) : inputs.medicalAllowance) +
-    (inputs.transportTaxable ? Math.max(0, inputs.transportAllowance - 600) : inputs.transportAllowance) +
+    (inputs.housingTaxable ? Math.max(0, inputs.housingAllowance - 600) : 0) +
+    (inputs.medicalTaxable ? Math.max(0, inputs.medicalAllowance - 600) : 0) +
+    (inputs.transportTaxable ? Math.max(0, inputs.transportAllowance - 600) : 0) +
     inputs.otherAllowances.reduce((sum, allowance) => 
-      sum + (allowance.taxable ? Math.max(0, allowance.amount - 600) : allowance.amount), 0)
+      sum + (allowance.taxable ? Math.max(0, allowance.amount - 600) : 0), 0)
 
   // Calculate income tax on the remaining amount
   const taxCalculation = calculateIncomeTax(taxableIncome)
