@@ -51,10 +51,31 @@ export async function POST(request: NextRequest) {
 
     let html = body.html
 
+    // Helper to resolve absolute origin both locally and on Vercel
+    const resolveOrigin = () => {
+      const xfProto = request.headers.get('x-forwarded-proto') || 'https'
+      const host = request.headers.get('host') || process.env.VERCEL_URL || ''
+      if (host) {
+        const url = host.startsWith('http') ? host : `${xfProto}://${host}`
+        return url
+      }
+      return 'http://localhost:3000'
+    }
+
     // If html not provided, load template from public and interpolate
     if (!html) {
-      const templatePath = path.join(process.cwd(), 'public', 'email-templates', 'salary-slip.html')
-      let template = await fs.readFile(templatePath, 'utf8')
+      let template = ''
+      // Prefer fetching the public asset (works reliably on Vercel)
+      try {
+        const origin = resolveOrigin()
+        const res = await fetch(new URL('/email-templates/salary-slip.html', origin))
+        if (!res.ok) throw new Error(`Template fetch failed: ${res.status}`)
+        template = await res.text()
+      } catch (e) {
+        // Fallback to reading from filesystem (works locally)
+        const templatePath = path.join(process.cwd(), 'public', 'email-templates', 'salary-slip.html')
+        template = await fs.readFile(templatePath, 'utf8')
+      }
       const defaults = {
         companyName: 'Ethiopian Salary Calculator',
         userName: 'Customer',
