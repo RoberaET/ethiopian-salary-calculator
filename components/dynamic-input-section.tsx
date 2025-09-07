@@ -237,8 +237,8 @@ export function DynamicInputSection({
                 <Input
                   id={`deduction-amount-${deduction.id}`}
                   type="number"
-                  value={deduction.amount}
-                  onChange={(e) => updateDeduction(deduction.id, "amount", Number(e.target.value))}
+                  value={deduction.amount === 0 ? "" : deduction.amount}
+                  onChange={(e) => updateDeduction(deduction.id, "amount", Number(e.target.value === "" ? 0 : e.target.value))}
                   placeholder="0"
                   className="mt-0"
                 />

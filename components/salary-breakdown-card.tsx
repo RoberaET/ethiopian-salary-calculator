@@ -51,6 +51,24 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
   const dailyTax = calculation.incomeTax / 30
   const dailyNetIncome = calculation.netSalary / 30
 
+  // Values shown in the highlight metrics depend on Monthly vs Annual view
+  const leftMetricValue = isAnnualView
+    ? (calculation.grossSalary + inputs.overtimePay) * 12
+    : dailyGrossSalary
+  const leftMetricLabel = isAnnualView
+    ? (isAmharic ? "ዓመታዊ ጠቅላላ ክፍያ" : "Annual Gross Pay")
+    : (isAmharic ? "የቀን ጠቅላላ ደመወዝ (÷30)" : "Daily Gross (÷30)")
+
+  const middleMetricValue = isAnnualView ? calculation.incomeTax * 12 : dailyTax
+  const middleMetricLabel = isAnnualView
+    ? (isAmharic ? "ዓመታዊ ታክስ" : "Annual Tax")
+    : (isAmharic ? "የቀን ታክስ" : "Daily Tax")
+
+  const rightMetricValue = isAnnualView ? (calculation.netSalary * 12) / 30 : dailyNetIncome
+  const rightMetricLabel = isAnnualView
+    ? (isAmharic ? "ዓመታዊ የቀን የተጣራ ገቢ" : "Annual Net Daily Income")
+    : (isAmharic ? "የቀን የተጣራ ደመወዝ (÷30)" : "Daily Net Income (÷30)")
+
   // Spotlight hover effect for top card
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -116,19 +134,19 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
             <div>
               <p className="text-2xl font-semibold text-secondary">
-                {formatCurrency(dailyGrossSalary)}
+                {formatCurrency(leftMetricValue)}
               </p>
-              <p className="text-xs text-muted-foreground">{isAmharic ? "የቀን ጠቅላላ ደመወዝ (÷30)" : "Daily Gross (÷30)"}</p>
+              <p className="text-xs text-muted-foreground">{leftMetricLabel}</p>
             </div>
             <div>
-              <p className="text-2xl font-semibold text-accent">{formatCurrency(dailyTax)}</p>
-              <p className="text-xs text-muted-foreground">{isAmharic ? "የቀን ታክስ" : "Daily Tax"}</p>
+              <p className="text-2xl font-semibold text-accent">{formatCurrency(middleMetricValue)}</p>
+              <p className="text-xs text-muted-foreground">{middleMetricLabel}</p>
             </div>
             <div>
               <p className="text-2xl font-semibold text-primary">
-                {formatCurrency(dailyNetIncome)}
+                {formatCurrency(rightMetricValue)}
               </p>
-              <p className="text-xs text-muted-foreground">{isAmharic ? "የቀን የተጣራ ደመወዝ (÷30)" : "Daily Net Income (÷30)"}</p>
+              <p className="text-xs text-muted-foreground">{rightMetricLabel}</p>
             </div>
           </div>
         </CardContent>
