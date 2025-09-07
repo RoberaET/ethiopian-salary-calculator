@@ -109,7 +109,7 @@ export default function EthiopianSalaryCalculator() {
               />
               <div>
                 <h1 className="text-2xl font-bold text-foreground">
-                  {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር 2024 - የተጣራ ደመወዝ እና የገቢ ታክስ ካልኩሌተር" : "Ethiopian Salary Calculator 2024 - Calculate Your Net Pay & Income Tax"}
+                  {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር 2025 - የተጣራ ደመወዝ እና የገቢ ታክስ ካልኩሌተር" : "Ethiopian Salary Calculator 2025 - Calculate Your Net Pay & Income Tax"}
                 </h1>
                 <p className="text-sm text-muted-foreground">
                   {isAmharic ? "የተጣራ ደመወዝዎን ያስሉ" : "Calculate Your Take-Home Pay"}
@@ -133,12 +133,12 @@ export default function EthiopianSalaryCalculator() {
         {/* SEO Content Section - Before Calculator */}
         <section className="seo-content mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            {isAmharic ? "ነፃ የኢትዮጵያ ደመወዝ ካልኩሌተር 2024" : "Free Ethiopian Salary Calculator 2024 - Calculate Your Net Pay & Income Tax"}
+            {isAmharic ? "ነፃ የኢትዮጵያ ደመወዝ ካልኩሌተር 2025" : "Free Ethiopian Salary Calculator 2025 - Calculate Your Net Pay & Income Tax"}
           </h2>
           <p className="text-gray-700 mb-4">
             {isAmharic 
-              ? <>የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2024</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል። ይህ ነፃ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> የአሁኑን PAYE ተመኖች በመተግበር ከገቢ ታክስ እና የጡረታ አበል በኋላ የተጣራ ደመወዝዎን ይወስናል።</>
-              : <>Our <strong>Ethiopian salary calculator</strong> helps you calculate your exact take-home pay using the latest <strong>Ethiopia tax brackets 2024</strong>. This free <strong>Ethiopian income tax calculator</strong> applies current PAYE rates to determine your net salary after income tax and pension contributions.</>
+              ? <>የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2025</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል። ይህ ነፃ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> የአሁኑን PAYE ተመኖች በመተግበር ከገቢ ታክስ እና የጡረታ አበል በኋላ የተጣራ ደመወዝዎን ይወስናል።</>
+              : <>Our <strong>Ethiopian salary calculator</strong> helps you calculate your exact take-home pay using the latest <strong>Ethiopia tax brackets 2025</strong>. This free <strong>Ethiopian income tax calculator</strong> applies current PAYE rates to determine your net salary after income tax and pension contributions.</>
             }
           </p>
           <p className="text-gray-700">
@@ -161,15 +161,15 @@ export default function EthiopianSalaryCalculator() {
 
             <Tabs defaultValue="basic" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="basic" className="flex items-center gap-2">
+                <TabsTrigger value="basic" className="flex items-center gap-2 data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
                   <DollarSign className="h-4 w-4" />
                   {isAmharic ? "መሰረታዊ" : "Basic"}
                 </TabsTrigger>
-                <TabsTrigger value="allowances" className="flex items-center gap-2">
+                <TabsTrigger value="allowances" className="flex items-center gap-2 data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
                   <Settings className="h-4 w-4" />
                   {isAmharic ? "አበሎች" : "Allowances"}
                 </TabsTrigger>
-                <TabsTrigger value="deductions" className="flex items-center gap-2">
+                <TabsTrigger value="deductions" className="flex items-center gap-2 data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md">
                   <FileText className="h-4 w-4" />
                   {isAmharic ? "ቅናሾች" : "Deductions"}
                 </TabsTrigger>
@@ -367,19 +367,19 @@ export default function EthiopianSalaryCalculator() {
             {/* Results Tabs */}
             <Tabs defaultValue="breakdown" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="breakdown" className="flex items-center gap-1 text-xs">
+                <TabsTrigger value="breakdown" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <FileText className="h-3 w-3" />
                   {isAmharic ? "ዝርዝር" : "Details"}
                 </TabsTrigger>
-                <TabsTrigger value="visualization" className="flex items-center gap-1 text-xs">
+                <TabsTrigger value="visualization" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <BarChart3 className="h-3 w-3" />
                   {isAmharic ? "ምስላዊ" : "Visual"}
                 </TabsTrigger>
-                <TabsTrigger value="whatif" className="flex items-center gap-1 text-xs">
+                <TabsTrigger value="whatif" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <Zap className="h-3 w-3" />
                   {isAmharic ? "ምን ቢሆን" : "What-If"}
                 </TabsTrigger>
-                <TabsTrigger value="export" className="flex items-center gap-1 text-xs">
+                <TabsTrigger value="export" className="flex items-center gap-1 text-xs data-[state=active]:bg-orange-500 data-[state=active]:text-white dark:data-[state=active]:bg-orange-500 dark:data-[state=active]:text-white">
                   <Share2 className="h-3 w-3" />
                   {isAmharic ? "ማጋራት" : "Share"}
                 </TabsTrigger>
@@ -480,11 +480,11 @@ export default function EthiopianSalaryCalculator() {
         </div>
 
         {/* SEO Content Section - After Calculator */}
-        <section className="tax-info mt-12 p-6 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg border border-orange-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <section className="tax-info mt-12 p-6 rounded-lg border bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-zinc-900 dark:to-zinc-800 border-orange-200 dark:border-border">
+          <h2 className="text-2xl font-bold text-foreground mb-4">
             {isAmharic ? "የኢትዮጵያ ታክስ ስሌት መረዳት" : "Understanding Ethiopian Tax Calculation"}
           </h2>
-          <p className="text-gray-700 mb-4">
+          <p className="text-muted-foreground mb-4">
             {isAmharic 
               ? <>የ<strong>ኢትዮጵያ ደመወዝ ካልኩሌተር</strong> ከፍተኛ ገቢ ያላቸው ሰዎች ተጨማሪ ታክስ የሚከፍሉበት የተለያዩ የታክስ ቅንጅቶችን ይጠቀማል። የእኛ <strong>የኢትዮጵያ PAYE ካልኩሌተር</strong> እነዚህን ተመኖች በራስ-ሰር ይተገብራል።</>
               : <>The <strong>Ethiopian salary calculator</strong> uses progressive tax brackets where higher earners pay more tax. Our <strong>Ethiopia PAYE calculator</strong> automatically applies these rates:</>
@@ -492,31 +492,31 @@ export default function EthiopianSalaryCalculator() {
           </p>
           <div className="grid md:grid-cols-2 gap-4 mb-6">
             <div className="space-y-2">
-              <div className="flex justify-between p-2 bg-white rounded border">
-                <span>0-600 ETB:</span>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>0 - 2,000 ETB:</span>
                 <span className="font-semibold text-green-600">0% tax</span>
               </div>
-              <div className="flex justify-between p-2 bg-white rounded border">
-                <span>601-1,650 ETB:</span>
-                <span className="font-semibold text-blue-600">10% tax</span>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>2,001 - 4,000 ETB:</span>
+                <span className="font-semibold text-blue-600">15% tax</span>
               </div>
-              <div className="flex justify-between p-2 bg-white rounded border">
-                <span>1,651-3,200 ETB:</span>
-                <span className="font-semibold text-orange-600">15% tax</span>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>4,001 - 7,000 ETB:</span>
+                <span className="font-semibold text-orange-600">20% tax</span>
               </div>
             </div>
             <div className="space-y-2">
-              <div className="flex justify-between p-2 bg-white rounded border">
-                <span>3,201-5,250 ETB:</span>
-                <span className="font-semibold text-red-600">20% tax</span>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>7,001 - 10,000 ETB:</span>
+                <span className="font-semibold text-red-600">25% tax</span>
               </div>
-              <div className="flex justify-between p-2 bg-white rounded border">
-                <span>5,251-7,800 ETB:</span>
-                <span className="font-semibold text-purple-600">25% tax</span>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>10,001 - 14,000 ETB:</span>
+                <span className="font-semibold text-purple-600">30% tax</span>
               </div>
-              <div className="flex justify-between p-2 bg-white rounded border">
-                <span>7,801+ ETB:</span>
-                <span className="font-semibold text-red-800">30% tax</span>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>14,001+ ETB:</span>
+                <span className="font-semibold text-red-800">35% tax</span>
               </div>
             </div>
           </div>
@@ -530,7 +530,7 @@ export default function EthiopianSalaryCalculator() {
           <ul className="space-y-3 text-gray-700">
             <li className="flex items-center gap-3">
               <span className="text-green-600 font-bold">✓</span>
-              {isAmharic ? <>በ2024 <strong>የኢትዮጵያ ታክስ ቅንጅቶች</strong> የተዘመነ</> : <>✓ Updated with 2024 <strong>Ethiopia tax brackets</strong></>}
+              {isAmharic ? <>በ2025 <strong>የኢትዮጵያ ታክስ ቅንጅቶች</strong> የተዘመነ</> : <>✓ Updated with 2025 <strong>Ethiopia tax brackets</strong></>}
             </li>
             <li className="flex items-center gap-3">
               <span className="text-green-600 font-bold">✓</span>
@@ -568,12 +568,12 @@ export default function EthiopianSalaryCalculator() {
 
             <div className="faq-item p-4 bg-white rounded-lg border">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                {isAmharic ? "ኢትዮጵያ በ2024 ምን ዓይነት የታክስ ቅንጅቶች እንደሚጠቀም?" : "What tax brackets does Ethiopia use in 2024?"}
+                {isAmharic ? "ኢትዮጵያ በ2025 ምን ዓይነት የታክስ ቅንጅቶች እንደሚጠቀም?" : "What tax brackets does Ethiopia use in 2025?"}
               </h3>
               <p className="text-gray-700">
                 {isAmharic 
-                  ? <>የ<strong>ኢትዮጵያ ታክስ ካልኩሌተር</strong> እነዚህን የተለያዩ ተመኖች ይተገብራል፡ 0-600 ETB (0%)፣ 601-1,650 ETB (10%)፣ 1,651-3,200 ETB (15%)፣ 3,201-5,250 ETB (20%)፣ 5,251-7,800 ETB (25%)፣ እና 7,801+ ETB (30%)።</>
-                  : <>The <strong>Ethiopia tax calculator</strong> applies these progressive rates: 0-600 ETB (0%), 601-1,650 ETB (10%), 1,651-3,200 ETB (15%), 3,201-5,250 ETB (20%), 5,251-7,800 ETB (25%), and 7,801+ ETB (30%).</>
+                  ? <>የ<strong>ኢትዮጵያ ታክስ ካልኩሌተር</strong> እነዚህን የተለያዩ ተመኖች ይተገብራል፡ 0-2,000 ብር (0%)፣ 2,001-4,000 ብር (15%)፣ 4,001-7,000 ብር (20%)፣ 7,001-10,000 ብር (25%)፣ 10,001-14,000 ብር (30%)፣ እና 14,001+ ብር (35%)።</>
+                  : <>The <strong>Ethiopia tax calculator</strong> applies these progressive rates: 0–2,000 ETB (0%), 2,001–4,000 ETB (15%), 4,001–7,000 ETB (20%), 7,001–10,000 ETB (25%), 10,001–14,000 ETB (30%), and 14,001+ ETB (35%).</>
                 }
               </p>
             </div>
@@ -613,8 +613,8 @@ export default function EthiopianSalaryCalculator() {
             <div className="text-xs text-muted-foreground">
               <p>
                 {isAmharic 
-                  ? "© 2024 የኢትዮጵያ ደመወዝ ካልኩሌተር - በ Robera Mekonnen የተሰላ" 
-                  : "© 2024 Ethiopian Salary Calculator - Developed by Robera Mekonnen"
+                  ? "© 2025 የኢትዮጵያ ደመወዝ ካልኩሌተር - በ Robera Mekonnen የተሰላ" 
+                  : "© 2025 Ethiopian Salary Calculator - Developed by Robera Mekonnen"
                 }
               </p>
             </div>

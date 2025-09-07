@@ -72,7 +72,7 @@ export default function RootLayout({
 }>) {
   const ogUpdatedTime = new Date().toISOString()
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Additional SEO Meta Tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
