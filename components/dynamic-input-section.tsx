@@ -173,22 +173,24 @@ export function DynamicInputSection({
           {loans.map((loan) => (
             <div key={loan.id} className="flex items-end gap-3 p-3 border rounded-lg">
               <div className="flex-1">
-                <Label htmlFor={`loan-name-${loan.id}`}>{isAmharic ? "የብድር ዓይነት" : "Loan Description"}</Label>
+                <Label htmlFor={`loan-name-${loan.id}`} className="block mb-2">{isAmharic ? "የብድር ዓይነት" : "Loan Description"}</Label>
                 <Input
                   id={`loan-name-${loan.id}`}
                   value={loan.name}
                   onChange={(e) => updateLoan(loan.id, "name", e.target.value)}
                   placeholder={isAmharic ? "ለምሳሌ: የቤት ብድር" : "e.g., Housing Loan"}
+                  className="mt-0"
                 />
               </div>
               <div className="flex-1">
-                <Label htmlFor={`loan-amount-${loan.id}`}>{isAmharic ? "ወራዊ ክፍያ (ብር)" : "Monthly Payment (ETB)"}</Label>
+                <Label htmlFor={`loan-amount-${loan.id}`} className="block mb-2">{isAmharic ? "ወራዊ ክፍያ (ብር)" : "Monthly Payment (ETB)"}</Label>
                 <Input
                   id={`loan-amount-${loan.id}`}
                   type="number"
                   value={loan.amount}
                   onChange={(e) => updateLoan(loan.id, "amount", Number(e.target.value))}
                   placeholder="0"
+                  className="mt-0"
                 />
               </div>
               <Button onClick={() => removeLoan(loan.id)} size="sm" variant="destructive" className="mb-0">
@@ -219,7 +221,7 @@ export function DynamicInputSection({
           {deductions.map((deduction) => (
             <div key={deduction.id} className="flex items-end gap-3 p-3 border rounded-lg">
               <div className="flex-1">
-                <Label htmlFor={`deduction-name-${deduction.id}`}>
+                <Label htmlFor={`deduction-name-${deduction.id}`} className="block mb-2">
                   {isAmharic ? "የቅናሽ ዓይነት" : "Deduction Description"}
                 </Label>
                 <Input
@@ -227,16 +229,18 @@ export function DynamicInputSection({
                   value={deduction.name}
                   onChange={(e) => updateDeduction(deduction.id, "name", e.target.value)}
                   placeholder={isAmharic ? "ለምሳሌ: የመድን ክፍያ" : "e.g., Insurance Premium"}
+                  className="mt-0"
                 />
               </div>
               <div className="flex-1">
-                <Label htmlFor={`deduction-amount-${deduction.id}`}>{isAmharic ? "መጠን (ብር)" : "Amount (ETB)"}</Label>
+                <Label htmlFor={`deduction-amount-${deduction.id}`} className="block mb-2">{isAmharic ? "መጠን (ብር)" : "Amount (ETB)"}</Label>
                 <Input
                   id={`deduction-amount-${deduction.id}`}
                   type="number"
                   value={deduction.amount}
                   onChange={(e) => updateDeduction(deduction.id, "amount", Number(e.target.value))}
                   placeholder="0"
+                  className="mt-0"
                 />
               </div>
               <Button onClick={() => removeDeduction(deduction.id)} size="sm" variant="destructive" className="mb-0">
