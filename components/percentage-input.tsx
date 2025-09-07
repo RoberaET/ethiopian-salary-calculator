@@ -58,6 +58,13 @@ export function PercentageInput({
   }
 
   const handleAmountChange = (value: string) => {
+    // Allow empty string to clear the input
+    if (value === "") {
+      onAmountChange(0)
+      onPercentageChange(0)
+      return
+    }
+    
     const numValue = Number(value)
     onAmountChange(numValue)
     
@@ -179,75 +186,16 @@ export function PercentageInput({
                 </span>
               </div>
               
-              {/* Tax Calculation for Taxable Allowances */}
+              {/* Taxable Income After Exemption for Taxable Allowances */}
               {isTaxable && amount > 0 && (
                 <div className="mt-3 pt-3 border-t border-border">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">
-                        {isAmharic ? "የታክስ ስሌት" : "Tax Calculation"}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {isAmharic ? "በዚህ አበል ላይ" : "On this allowance"}
-                      </span>
-                    </div>
-                    
-                    {/* Taxable Income */}
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">
-                        {isAmharic ? "የታክስ የሚከፈልበት ገቢ" : "Taxable Income"}
-                      </span>
-                      <span className="font-medium">
-                        {amount.toLocaleString()} {isAmharic ? "ብር" : "ETB"}
-                      </span>
-                    </div>
-                    
-                    {/* Tax Amount */}
-                    {(() => {
-                      const taxCalculation = calculateIncomeTax(amount)
-                      return (
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-muted-foreground">
-                            {isAmharic ? "የታክስ መጠን" : "Tax Amount"}
-                          </span>
-                          <span className="font-semibold text-destructive">
-                            -{taxCalculation.totalTax.toLocaleString()} {isAmharic ? "ብር" : "ETB"}
-                          </span>
-                        </div>
-                      )
-                    })()}
-                    
-                    {/* Net Allowance After Tax */}
-                    {(() => {
-                      const taxCalculation = calculateIncomeTax(amount)
-                      const netAllowance = amount - taxCalculation.totalTax
-                      return (
-                        <div className="flex items-center justify-between text-xs font-semibold pt-1 border-t border-border">
-                          <span className="text-primary">
-                            {isAmharic ? "ከታክስ በኋላ የተጣራ አበል" : "Net Allowance After Tax"}
-                          </span>
-                          <span className="text-primary">
-                            {netAllowance.toLocaleString()} {isAmharic ? "ብር" : "ETB"}
-                          </span>
-                        </div>
-                      )
-                    })()}
-                    
-                    {/* Tax Rate */}
-                    {(() => {
-                      const taxCalculation = calculateIncomeTax(amount)
-                      const effectiveTaxRate = amount > 0 ? (taxCalculation.totalTax / amount) * 100 : 0
-                      return (
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span>
-                            {isAmharic ? "ውጤታማ ታክስ መጠን" : "Effective Tax Rate"}
-                          </span>
-                          <span>
-                            {effectiveTaxRate.toFixed(1)}%
-                          </span>
-                        </div>
-                      )
-                    })()}
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">
+                      {isAmharic ? "የታክስ የሚከፈልበት ገቢ (ከ 600 ብር ነፃ ከሆነ በኋላ)" : "Taxable Income (after 600 ETB exempt)"}
+                    </span>
+                    <span className="font-medium text-primary">
+                      {Math.max(0, amount - 600).toLocaleString()} {isAmharic ? "ብር" : "ETB"}
+                    </span>
                   </div>
                 </div>
               )}
@@ -258,9 +206,9 @@ export function PercentageInput({
         <div className="space-y-3">
           <Input
             type="number"
-            value={amount}
+            value={amount || ""}
             onChange={(e) => handleAmountChange(e.target.value)}
-            placeholder={placeholder}
+            placeholder={isAmharic ? "መጠን ያስገቡ" : "Enter amount"}
             min="0"
           />
           
@@ -284,75 +232,16 @@ export function PercentageInput({
                 </span>
               </div>
               
-              {/* Tax Calculation for Taxable Allowances */}
+              {/* Taxable Income After Exemption for Taxable Allowances */}
               {isTaxable && amount > 0 && (
                 <div className="mt-3 pt-3 border-t border-border">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">
-                        {isAmharic ? "የታክስ ስሌት" : "Tax Calculation"}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {isAmharic ? "በዚህ አበል ላይ" : "On this allowance"}
-                      </span>
-                    </div>
-                    
-                    {/* Taxable Income */}
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">
-                        {isAmharic ? "የታክስ የሚከፈልበት ገቢ" : "Taxable Income"}
-                      </span>
-                      <span className="font-medium">
-                        {amount.toLocaleString()} {isAmharic ? "ብር" : "ETB"}
-                      </span>
-                    </div>
-                    
-                    {/* Tax Amount */}
-                    {(() => {
-                      const taxCalculation = calculateIncomeTax(amount)
-                      return (
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-muted-foreground">
-                            {isAmharic ? "የታክስ መጠን" : "Tax Amount"}
-                          </span>
-                          <span className="font-semibold text-destructive">
-                            -{taxCalculation.totalTax.toLocaleString()} {isAmharic ? "ብር" : "ETB"}
-                          </span>
-                        </div>
-                      )
-                    })()}
-                    
-                    {/* Net Allowance After Tax */}
-                    {(() => {
-                      const taxCalculation = calculateIncomeTax(amount)
-                      const netAllowance = amount - taxCalculation.totalTax
-                      return (
-                        <div className="flex items-center justify-between text-xs font-semibold pt-1 border-t border-border">
-                          <span className="text-primary">
-                            {isAmharic ? "ከታክስ በኋላ የተጣራ አበል" : "Net Allowance After Tax"}
-                          </span>
-                          <span className="text-primary">
-                            {netAllowance.toLocaleString()} {isAmharic ? "ብር" : "ETB"}
-                          </span>
-                        </div>
-                      )
-                    })()}
-                    
-                    {/* Tax Rate */}
-                    {(() => {
-                      const taxCalculation = calculateIncomeTax(amount)
-                      const effectiveTaxRate = amount > 0 ? (taxCalculation.totalTax / amount) * 100 : 0
-                      return (
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span>
-                            {isAmharic ? "ውጤታማ ታክስ መጠን" : "Effective Tax Rate"}
-                          </span>
-                          <span>
-                            {effectiveTaxRate.toFixed(1)}%
-                          </span>
-                        </div>
-                      )
-                    })()}
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">
+                      {isAmharic ? "የታክስ የሚከፈልበት ገቢ (ከ 600 ብር ነፃ ከሆነ በኋላ)" : "Taxable Income (after 600 ETB exempt)"}
+                    </span>
+                    <span className="font-medium text-primary">
+                      {Math.max(0, amount - 600).toLocaleString()} {isAmharic ? "ብር" : "ETB"}
+                    </span>
                   </div>
                 </div>
               )}

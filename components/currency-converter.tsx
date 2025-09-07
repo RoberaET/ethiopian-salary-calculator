@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
@@ -22,8 +22,13 @@ const MOCK_EXCHANGE_RATES = {
 export function CurrencyConverter({ netSalary, isAmharic }: CurrencyConverterProps) {
   const [selectedCurrency, setSelectedCurrency] = useState("USD")
   const [exchangeRates, setExchangeRates] = useState(MOCK_EXCHANGE_RATES)
-  const [lastUpdated, setLastUpdated] = useState(new Date())
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
+
+  // Initialize lastUpdated on client side only to avoid hydration mismatch
+  useEffect(() => {
+    setLastUpdated(new Date())
+  }, [])
 
   const convertedAmount = netSalary * exchangeRates[selectedCurrency as keyof typeof exchangeRates]
 
@@ -97,7 +102,7 @@ export function CurrencyConverter({ netSalary, isAmharic }: CurrencyConverterPro
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>{isAmharic ? "የመጨረሻ ዝማኔ" : "Last updated"}</span>
           <Badge variant="outline" className="text-xs">
-            {lastUpdated.toLocaleTimeString()}
+            {lastUpdated ? lastUpdated.toLocaleTimeString() : "..."}
           </Badge>
         </div>
 

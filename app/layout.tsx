@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
+import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -74,9 +75,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#667eea" />
         <meta name="msapplication-TileColor" content="#667eea" />
         
-        {/* Preload Critical Resources */}
-        <link rel="preload" href="/fonts/geist-sans.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/geist-mono.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {/* Font preloading is handled by Next/font (GeistSans/GeistMono) */}
         
         {/* Structured Data - WebApplication */}
         <script
@@ -170,16 +169,17 @@ export default function RootLayout({
         />
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="hidden">
-          <ol>
-            <li><a href="/">Ethiopian Salary Calculator</a></li>
-            <li>Tax Calculator</li>
-          </ol>
-        </nav>
-        
-        {children}
-        <Analytics />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {/* Breadcrumb Navigation */}
+          <nav aria-label="Breadcrumb" className="hidden">
+            <ol>
+              <li><a href="/">Ethiopian Salary Calculator</a></li>
+              <li>Tax Calculator</li>
+            </ol>
+          </nav>
+          {children}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )

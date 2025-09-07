@@ -17,7 +17,11 @@ export function ExportShareOptions({ calculation, inputs, isAmharic }: ExportSha
   const [copied, setCopied] = useState(false)
 
   const generatePayslipText = () => {
-    const date = new Date().toLocaleDateString()
+    const date = new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })
     return `
 ${isAmharic ? "የደመወዝ ደረሰኝ" : "SALARY SLIP"}
 ${isAmharic ? "ቀን" : "Date"}: ${date}
@@ -38,7 +42,7 @@ ${isAmharic ? "የታክስ መረጃ" : "TAX INFORMATION"}:
 ${isAmharic ? "ውጤታማ ታክስ መጠን" : "Effective Tax Rate"}: ${(calculation.effectiveTaxRate * 100).toFixed(1)}%
 ${isAmharic ? "ወሳኝ ታክስ መጠን" : "Marginal Tax Rate"}: ${(calculation.marginalTaxRate * 100).toFixed(0)}%
 
-${isAmharic ? "በ v0.app የኢትዮጵያ ደመወዝ ካልኩሌተር የተሰላ" : "Calculated using Ethiopian Salary Calculator at v0.app"}
+${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonnen"}
     `.trim()
   }
 
@@ -583,7 +587,7 @@ ${isAmharic ? "በ v0.app የኢትዮጵያ ደመወዝ ካልኩሌተር የ
               </div>
 
               <div class="footer">
-                <p><strong>${isAmharic ? "በ v0.app የኢትዮጵያ ደመወዝ ካልኩሌተር የተሰላ" : "Calculated using Ethiopian Salary Calculator at v0.app"}</strong></p>
+                <p><strong>${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonnen"}</strong></p>
                 <p>${isAmharic ? "ማስታወሻ: ይህ የደመወዝ ደረሰኝ ለመረጃ አገልግሎት ብቻ ነው" : "Note: This salary slip is for informational purposes only"}</p>
                 <p style="margin-top: 15px; font-size: 11px; opacity: 0.7;">
                   ${isAmharic ? "የተፈጠረው" : "Generated on"}: ${new Date().toLocaleString()}

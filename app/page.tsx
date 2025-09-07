@@ -7,8 +7,11 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calculator, DollarSign, Settings, FileText, BarChart3, Zap, Share2 } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { calculateSalary, TAX_BRACKETS, type SalaryInputs } from "@/lib/salary-calculator"
 import { DynamicInputSection } from "@/components/dynamic-input-section"
+import { Calendar as UiCalendar } from "@/components/ui/calendar"
+import { endOfMonth, differenceInCalendarDays } from "date-fns"
 import { OvertimeCalculator } from "@/components/overtime-calculator"
 import { SalaryBreakdownCard } from "@/components/salary-breakdown-card"
 import { TaxBracketVisualization } from "@/components/tax-bracket-visualization"
@@ -39,6 +42,10 @@ export default function EthiopianSalaryCalculator() {
 
   const [isAmharic, setIsAmharic] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const today = new Date()
+  const salaryDay = endOfMonth(today)
+  const daysLeftForSalary = Math.max(0, differenceInCalendarDays(salaryDay, today))
 
   const calculation = calculateSalary(inputs)
 
@@ -62,6 +69,12 @@ export default function EthiopianSalaryCalculator() {
   }
 
   const handleNumberInput = (field: keyof SalaryInputs, value: string) => {
+    // Allow empty string to clear the input
+    if (value === "") {
+      updateInput(field, 0)
+      return
+    }
+    
     const numValue = Number(value)
     if (validateInput(field, numValue)) {
       updateInput(field, numValue)
@@ -78,6 +91,15 @@ export default function EthiopianSalaryCalculator() {
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <Calculator className="h-6 w-6" />
               </div>
+              <img
+                src="/images/et.svg"
+                alt={isAmharic ? "የኢትዮጵያ ባንዲራ" : "Ethiopian flag"}
+                width={44}
+                height={44}
+                className="rounded-sm"
+                loading="eager"
+                decoding="async"
+              />
               <div>
                 <h1 className="text-2xl font-bold text-foreground">
                   {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር 2024 - የተጣራ ደመወዝ እና የገቢ ታክስ ካልኩሌተር" : "Ethiopian Salary Calculator 2024 - Calculate Your Net Pay & Income Tax"}
@@ -94,6 +116,7 @@ export default function EthiopianSalaryCalculator() {
                 </Label>
                 <Switch id="language-toggle" checked={isAmharic} onCheckedChange={setIsAmharic} />
               </div>
+              <ThemeToggle />
             </div>
           </div>
         </div>
@@ -107,14 +130,14 @@ export default function EthiopianSalaryCalculator() {
           </h2>
           <p className="text-gray-700 mb-4">
             {isAmharic 
-              ? "የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2024</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል። ይህ ነፃ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> የአሁኑን PAYE ተመኖች በመተግበር ከገቢ ታክስ እና የጡረታ አበል በኋላ የተጣራ ደመወዝዎን ይወስናል።"
-              : "Our <strong>Ethiopian salary calculator</strong> helps you calculate your exact take-home pay using the latest <strong>Ethiopia tax brackets 2024</strong>. This free <strong>Ethiopian income tax calculator</strong> applies current PAYE rates to determine your net salary after income tax and pension contributions."
+              ? <>የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2024</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል። ይህ ነፃ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> የአሁኑን PAYE ተመኖች በመተግበር ከገቢ ታክስ እና የጡረታ አበል በኋላ የተጣራ ደመወዝዎን ይወስናል።</>
+              : <>Our <strong>Ethiopian salary calculator</strong> helps you calculate your exact take-home pay using the latest <strong>Ethiopia tax brackets 2024</strong>. This free <strong>Ethiopian income tax calculator</strong> applies current PAYE rates to determine your net salary after income tax and pension contributions.</>
             }
           </p>
           <p className="text-gray-700">
             {isAmharic 
-              ? "የደመወዝ ድርድር እና የገንዘብ አያያዝ እቅድ ብትዘጋጁም፣ የእኛ <strong>የኢትዮጵያ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 ታክስ ተመኖች በመመስረት ትክክለኛ ውጤቶችን ይሰጣል።"
-              : "Whether you're planning salary negotiations or budgeting your finances, our <strong>Ethiopia tax calculator</strong> provides accurate results based on Proclamation No. 979/2016 tax rates."
+              ? <>የደመወዝ ድርድር እና የገንዘብ አያያዝ እቅድ ብትዘጋጁም፣ የእኛ <strong>የኢትዮጵያ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 ታክስ ተመኖች በመመስረት ትክክለኛ ውጤቶችን ይሰጣል።</>
+              : <>Whether you're planning salary negotiations or budgeting your finances, our <strong>Ethiopia tax calculator</strong> provides accurate results based on Proclamation No. 979/2016 tax rates.</>
             }
           </p>
         </section>
@@ -159,16 +182,16 @@ export default function EthiopianSalaryCalculator() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <Label htmlFor="gross-salary">
+                      <Label htmlFor="gross-salary" className="mb-2">
                         {isAmharic ? "ጠቅላላ ወራዊ ደመወዝ (ብር)" : "Gross Monthly Salary (ETB)"}
                       </Label>
                       <Input
                         id="gross-salary"
                         type="number"
-                        value={inputs.grossSalary}
+                        value={inputs.grossSalary || ""}
                         onChange={(e) => handleNumberInput("grossSalary", e.target.value)}
                         className={`text-lg font-semibold ${errors.grossSalary ? "border-destructive" : ""}`}
-                        placeholder="0"
+                        placeholder={isAmharic ? "ደመወዝዎን ያስገቡ" : "Enter your salary"}
                         min="0"
                         aria-label={isAmharic ? "ጠቅላላ ወራዊ ደመወዝ በኢትዮጵያ ብር" : "Enter your gross salary in Ethiopian Birr"}
                         aria-describedby="gross-salary-help"
@@ -228,6 +251,23 @@ export default function EthiopianSalaryCalculator() {
                       isAmharic={isAmharic}
                       placeholder="0"
                     />
+
+                    {/* Calendar under allowances, left-aligned */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="md:col-span-2">
+                        <UiCalendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          showOutsideDays={false}
+                          className="w-full rounded-md border shadow [--cell-size:--spacing(6)] p-2"
+                          classNames={{ root: "w-full" }}
+                        />
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {isAmharic ? "እስከ ደመወዝ ቀን የቀሩ ቀናት:" : "Days left until salary day:"} {daysLeftForSalary}
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -274,9 +314,9 @@ export default function EthiopianSalaryCalculator() {
                       <Input
                         id="union-dues"
                         type="number"
-                        value={inputs.unionDues}
+                        value={inputs.unionDues || ""}
                         onChange={(e) => handleNumberInput("unionDues", e.target.value)}
-                        placeholder="0"
+                        placeholder={isAmharic ? "ክፍያ ያስገቡ" : "Enter amount"}
                         min="0"
                         aria-label={isAmharic ? "የሰራተኛ ማህበር ክፍያ በኢትዮጵያ ብር" : "Enter union dues in Ethiopian Birr"}
                       />
@@ -340,7 +380,12 @@ export default function EthiopianSalaryCalculator() {
 
               <TabsContent value="breakdown" className="space-y-6">
                 {/* Salary Breakdown Card */}
-                <SalaryBreakdownCard calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
+                <SalaryBreakdownCard 
+                  key={`${inputs.transportTaxable}-${inputs.housingTaxable}-${inputs.medicalTaxable}`}
+                  calculation={calculation} 
+                  inputs={inputs} 
+                  isAmharic={isAmharic} 
+                />
 
                 {/* Currency Converter */}
                 <CurrencyConverter netSalary={calculation.netSalary} isAmharic={isAmharic} />
@@ -412,8 +457,8 @@ export default function EthiopianSalaryCalculator() {
           </h2>
           <p className="text-gray-700 mb-4">
             {isAmharic 
-              ? "የ<strong>ኢትዮጵያ ደመወዝ ካልኩሌተር</strong> ከፍተኛ ገቢ ያላቸው ሰዎች ተጨማሪ ታክስ የሚከፍሉበት የተለያዩ የታክስ ቅንጅቶችን ይጠቀማል። የእኛ <strong>የኢትዮጵያ PAYE ካልኩሌተር</strong> እነዚህን ተመኖች በራስ-ሰር ይተገብራል።"
-              : "The <strong>Ethiopian salary calculator</strong> uses progressive tax brackets where higher earners pay more tax. Our <strong>Ethiopia PAYE calculator</strong> automatically applies these rates:"
+              ? <>የ<strong>ኢትዮጵያ ደመወዝ ካልኩሌተር</strong> ከፍተኛ ገቢ ያላቸው ሰዎች ተጨማሪ ታክስ የሚከፍሉበት የተለያዩ የታክስ ቅንጅቶችን ይጠቀማል። የእኛ <strong>የኢትዮጵያ PAYE ካልኩሌተር</strong> እነዚህን ተመኖች በራስ-ሰር ይተገብራል።</>
+              : <>The <strong>Ethiopian salary calculator</strong> uses progressive tax brackets where higher earners pay more tax. Our <strong>Ethiopia PAYE calculator</strong> automatically applies these rates:</>
             }
           </p>
           <div className="grid md:grid-cols-2 gap-4 mb-6">
@@ -456,11 +501,11 @@ export default function EthiopianSalaryCalculator() {
           <ul className="space-y-3 text-gray-700">
             <li className="flex items-center gap-3">
               <span className="text-green-600 font-bold">✓</span>
-              {isAmharic ? "በ2024 <strong>የኢትዮጵያ ታክስ ቅንጅቶች</strong> የተዘመነ" : "✓ Updated with 2024 <strong>Ethiopia tax brackets</strong>"}
+              {isAmharic ? <>በ2024 <strong>የኢትዮጵያ ታክስ ቅንጅቶች</strong> የተዘመነ</> : <>✓ Updated with 2024 <strong>Ethiopia tax brackets</strong></>}
             </li>
             <li className="flex items-center gap-3">
               <span className="text-green-600 font-bold">✓</span>
-              {isAmharic ? "ትክክለኛ <strong>PAYE ታክስ ስሌት</strong>" : "✓ Accurate <strong>PAYE tax calculation</strong>"}
+              {isAmharic ? <>ትክክለኛ <strong>PAYE ታክስ ስሌት</strong></> : <>✓ Accurate <strong>PAYE tax calculation</strong></>}
             </li>
             <li className="flex items-center gap-3">
               <span className="text-green-600 font-bold">✓</span>
@@ -468,7 +513,7 @@ export default function EthiopianSalaryCalculator() {
             </li>
             <li className="flex items-center gap-3">
               <span className="text-green-600 font-bold">✓</span>
-              {isAmharic ? "ነፃ <strong>የኢትዮጵያ የተጣራ ደመወዝ ካልኩሌተር</strong>" : "✓ Free <strong>Ethiopian net salary calculator</strong>"}
+              {isAmharic ? <>ነፃ <strong>የኢትዮጵያ የተጣራ ደመወዝ ካልኩሌተር</strong></> : <>✓ Free <strong>Ethiopian net salary calculator</strong></>}
             </li>
           </ul>
         </section>
@@ -486,8 +531,8 @@ export default function EthiopianSalaryCalculator() {
               </h3>
               <p className="text-gray-700">
                 {isAmharic 
-                  ? "የእኛ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 አገር አቋራጭ PAYE ተመኖችን ይጠቀማል። ይህ የታክስ ካልኩሌተር በኢትዮጵያ ውስጥ ለሚሰሩ ሁሉም ሰራተኞች ትክክለኛ ውጤቶችን ይሰጣል።"
-                  : "Our <strong>Ethiopian income tax calculator</strong> uses the official PAYE rates from Proclamation No. 979/2016. This tax calculator provides accurate results for all employees working in Ethiopia."
+                  ? <>የእኛ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 አገር አቋራጭ PAYE ተመኖችን ይጠቀማል። ይህ የታክስ ካልኩሌተር በኢትዮጵያ ውስጥ ለሚሰሩ ሁሉም ሰራተኞች ትክክለኛ ውጤቶችን ይሰጣል።</>
+                  : <>Our <strong>Ethiopian income tax calculator</strong> uses the official PAYE rates from Proclamation No. 979/2016. This tax calculator provides accurate results for all employees working in Ethiopia.</>
                 }
               </p>
             </div>
@@ -498,8 +543,8 @@ export default function EthiopianSalaryCalculator() {
               </h3>
               <p className="text-gray-700">
                 {isAmharic 
-                  ? "የ<strong>ኢትዮጵያ ታክስ ካልኩሌተር</strong> እነዚህን የተለያዩ ተመኖች ይተገብራል፡ 0-600 ETB (0%)፣ 601-1,650 ETB (10%)፣ 1,651-3,200 ETB (15%)፣ 3,201-5,250 ETB (20%)፣ 5,251-7,800 ETB (25%)፣ እና 7,801+ ETB (30%)።"
-                  : "The <strong>Ethiopia tax calculator</strong> applies these progressive rates: 0-600 ETB (0%), 601-1,650 ETB (10%), 1,651-3,200 ETB (15%), 3,201-5,250 ETB (20%), 5,251-7,800 ETB (25%), and 7,801+ ETB (30%)."
+                  ? <>የ<strong>ኢትዮጵያ ታክስ ካልኩሌተር</strong> እነዚህን የተለያዩ ተመኖች ይተገብራል፡ 0-600 ETB (0%)፣ 601-1,650 ETB (10%)፣ 1,651-3,200 ETB (15%)፣ 3,201-5,250 ETB (20%)፣ 5,251-7,800 ETB (25%)፣ እና 7,801+ ETB (30%)።</>
+                  : <>The <strong>Ethiopia tax calculator</strong> applies these progressive rates: 0-600 ETB (0%), 601-1,650 ETB (10%), 1,651-3,200 ETB (15%), 3,201-5,250 ETB (20%), 5,251-7,800 ETB (25%), and 7,801+ ETB (30%).</>
                 }
               </p>
             </div>
@@ -518,6 +563,35 @@ export default function EthiopianSalaryCalculator() {
           </div>
         </section>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t bg-card mt-16">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Calculator className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-foreground">
+                  {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Ethiopian Salary Calculator"}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {isAmharic ? "በ Robera Mekonnen የተሰላ" : "Developed by Robera Mekonnen"}
+                </p>
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <p>
+                {isAmharic 
+                  ? "© 2024 የኢትዮጵያ ደመወዝ ካልኩሌተር - በ Robera Mekonnen የተሰላ" 
+                  : "© 2024 Ethiopian Salary Calculator - Developed by Robera Mekonnen"
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
