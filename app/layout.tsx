@@ -70,6 +70,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const ogUpdatedTime = new Date().toISOString()
   return (
     <html lang="en">
       <head>
@@ -80,6 +81,17 @@ export default function RootLayout({
         <meta name="ICBM" content="9.1450, 40.4897" />
         <meta name="theme-color" content="#667eea" />
         <meta name="msapplication-TileColor" content="#667eea" />
+
+        {/* Explicit OG/Twitter tags to refresh social previews */}
+        <meta property="og:title" content="Ethiopian Salary Calculator 2025 - Free Tax Calculator" />
+        <meta property="og:description" content="Free Ethiopian tax calculator with 2025 PAYE rates" />
+        <meta property="og:url" content="https://ethiopiansalarycalculator.vercel.app" />
+        <meta property="og:site_name" content="Ethiopian Salary Calculator" />
+        <meta property="og:type" content="website" />
+        <meta property="og:updated_time" content={ogUpdatedTime} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Ethiopian Salary Calculator 2025" />
+        <meta name="twitter:description" content="Free Ethiopian tax calculator with 2025 PAYE rates" />
         
         {/* Font preloading is handled by Next/font (GeistSans/GeistMono) */}
         
