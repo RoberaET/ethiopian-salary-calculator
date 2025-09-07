@@ -144,7 +144,7 @@ export default function EthiopianSalaryCalculator() {
           <p className="text-gray-700">
             {isAmharic 
               ? <>የደመወዝ ድርድር እና የገንዘብ አያያዝ እቅድ ብትዘጋጁም፣ የእኛ <strong>የኢትዮጵያ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 ታክስ ተመኖች በመመስረት ትክክለኛ ውጤቶችን ይሰጣል።</>
-              : <>Whether you're planning salary negotiations or budgeting your finances, our <strong>Ethiopia tax calculator</strong> provides accurate results based on Proclamation No. 979/2016 tax rates.</>
+              : <>Whether you're planning salary negotiations or budgeting your finances, our <strong>Ethiopia tax calculator</strong> provides accurate results based on Proclamation No. 1395/2025 tax rates.</>
             }
           </p>
         </section>
@@ -424,7 +424,7 @@ export default function EthiopianSalaryCalculator() {
 
                     <div className="mt-4">
                       <h4 className="font-semibold mb-2">
-                        {isAmharic ? "የታክስ ደረጃዎች" : "Tax Brackets (Proclamation No. 979/2016)"}
+                        {isAmharic ? "የታክስ ደረጃዎች" : "Tax Brackets (Proclamation No. 1395/2025)"}
                       </h4>
                       <div className="space-y-2 text-sm">
                         {TAX_BRACKETS.map((bracket, index) => (
@@ -561,7 +561,7 @@ export default function EthiopianSalaryCalculator() {
               <p className="text-gray-700">
                 {isAmharic 
                   ? <>የእኛ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 አገር አቋራጭ PAYE ተመኖችን ይጠቀማል። ይህ የታክስ ካልኩሌተር በኢትዮጵያ ውስጥ ለሚሰሩ ሁሉም ሰራተኞች ትክክለኛ ውጤቶችን ይሰጣል።</>
-                  : <>Our <strong>Ethiopian income tax calculator</strong> uses the official PAYE rates from Proclamation No. 979/2016. This tax calculator provides accurate results for all employees working in Ethiopia.</>
+                  : <>Our <strong>Ethiopian income tax calculator</strong> uses the official PAYE rates from Proclamation No. 1395/2025. This tax calculator provides accurate results for all employees working in Ethiopia.</>
                 }
               </p>
             </div>

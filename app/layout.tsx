@@ -7,9 +7,9 @@ import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Ethiopian Salary Calculator 2024 - Free Tax & Net Pay Calculator | Ethiopia PAYE',
-  description: 'Free Ethiopian salary calculator 2024. Calculate your net pay, income tax (PAYE), and pension contributions with current Ethiopia tax brackets. Instant accurate results.',
-  keywords: 'Ethiopian salary calculator, Ethiopia tax calculator, Ethiopian income tax calculator, PAYE Ethiopia, net salary Ethiopia, tax brackets Ethiopia 2024',
+  title: 'Ethiopian Salary Calculator 2025 - Free Tax & Net Pay Calculator | Ethiopia PAYE',
+  description: 'Free Ethiopian salary calculator 2025. Calculate your net pay, income tax (PAYE), and pension contributions with current Ethiopia tax brackets. Instant accurate results.',
+  keywords: 'Ethiopian salary calculator, Ethiopia tax calculator, Ethiopian income tax calculator, PAYE Ethiopia, net salary Ethiopia, tax brackets Ethiopia 2025',
   authors: [{ name: 'Ethiopian Salary Calculator' }],
   creator: 'Ethiopian Salary Calculator',
   publisher: 'Ethiopian Salary Calculator',
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://ethiopian-salary-calculator.vercel.app'),
+  metadataBase: new URL('https://ethiopiansalarycalculator.vercel.app'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Ethiopian Salary Calculator 2024 - Free Tax Calculator',
-    description: 'Calculate your Ethiopian net salary with our free tax calculator. Current PAYE rates and tax brackets.',
-    url: 'https://ethiopian-salary-calculator.vercel.app',
+    title: 'Ethiopian Salary Calculator 2025 - Free Tax Calculator',
+    description: 'Calculate your Ethiopian net salary with our free tax calculator. Current 2025 PAYE rates and tax brackets.',
+    url: 'https://ethiopiansalarycalculator.vercel.app',
     siteName: 'Ethiopian Salary Calculator',
     images: [
       {
@@ -40,8 +40,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ethiopian Salary Calculator 2024',
-    description: 'Free Ethiopian tax calculator with 2024 PAYE rates',
+    title: 'Ethiopian Salary Calculator 2025',
+    description: 'Free Ethiopian tax calculator with 2025 PAYE rates',
     images: ['/images/calculator-preview.jpg'],
   },
   robots: {
@@ -134,7 +134,7 @@ export default function RootLayout({
                   "name": "How accurate is this Ethiopian salary calculator?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Our Ethiopian income tax calculator uses the official PAYE rates from Proclamation No. 979/2016. This tax calculator provides accurate results for all employees working in Ethiopia."
+                    "text": "Our Ethiopian income tax calculator uses the official PAYE rates from Proclamation No. 1395/2025. This tax calculator provides accurate results for all employees working in Ethiopia."
                   }
                 },
                 {

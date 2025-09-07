@@ -17,7 +17,7 @@ A professional, feature-rich salary calculator for Ethiopian employees with beau
 - **Tax-aware Display**: Shows tax calculations for taxable allowances
 
 ### 📊 **Comprehensive Salary Calculation**
-- **Ethiopian Tax Brackets**: Accurate tax calculations per Proclamation No. 979/2016
+- **Ethiopian Tax Brackets**: Accurate tax calculations per Proclamation No. 1395/2025
 - **Multiple Allowance Types**: Transport, Housing, Medical, and custom allowances
 - **Deduction Management**: Union dues, loan deductions, and other deductions
 - **Overtime Calculation**: Built-in overtime pay calculator
@@ -129,7 +129,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Ethiopian tax brackets based on Proclamation No. 979/2016
+- Ethiopian tax brackets based on Proclamation No. 1395/2025
 - Built with modern web technologies
 - Inspired by the need for accurate salary calculations in Ethiopia
 
