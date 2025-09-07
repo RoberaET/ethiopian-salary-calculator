@@ -452,28 +452,6 @@ export default function EthiopianSalaryCalculator() {
               <TabsContent value="export" className="space-y-6">
                 {/* Export & Share Options */}
                 <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
-                <div className="grid grid-cols-1 gap-3">
-                  <button
-                    className="px-3 py-2 rounded border text-sm"
-                    onClick={async () => {
-                      try {
-                        await sendInvoiceEmail({
-                          to: 'test@example.com',
-                          subject: 'Your Invoice',
-                          companyName: 'Ethiopian Salary Calculator',
-                          userName: 'Test User',
-                          amount: `${calculation.netSalary.toFixed(2)} ETB`,
-                          invoiceDate: new Date().toLocaleDateString(),
-                        })
-                        alert('Email sent')
-                      } catch (e: any) {
-                        alert(e.message)
-                      }
-                    }}
-                  >
-                    Send Test Invoice Email
-                  </button>
-                </div>
               </TabsContent>
             </Tabs>
           </div>
