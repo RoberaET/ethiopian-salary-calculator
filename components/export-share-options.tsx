@@ -67,7 +67,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
     try {
       setSending(true)
       setSendError(null)
-      const subject = isAmharic ? "የክፍያ ተከታታይ መልዕክት" : "Invoice from Ethiopian Salary Calculator"
+      const subject = isAmharic ? "የደመወዝ ደረሰኝ" : "Salary Slip from Ethiopian Salary Calculator"
       const resp = await fetch('/api/sendEmail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -77,8 +77,14 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
           variables: {
             companyName: 'Ethiopian Salary Calculator',
             userName: isAmharic ? 'ደንበኛ' : 'Customer',
-            amount: `${formatCurrency(calculation.netSalary)} ETB`,
             invoiceDate: new Date().toLocaleDateString(),
+            grossSalary: formatCurrency(calculation.grossSalary),
+            totalAllowances: formatCurrency(calculation.totalAllowances),
+            incomeTax: formatCurrency(calculation.incomeTax),
+            pension: formatCurrency(calculation.pensionContribution),
+            netSalary: formatCurrency(calculation.netSalary),
+            effectiveTaxRate: `${(calculation.effectiveTaxRate * 100).toFixed(1)}%`,
+            marginalTaxRate: `${(calculation.marginalTaxRate * 100).toFixed(0)}%`,
           },
         }),
       })

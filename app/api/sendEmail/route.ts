@@ -13,6 +13,18 @@ type SendEmailBody = {
   variables?: Record<string, string | number>
 }
 
+export async function GET() {
+  // Diagnostics endpoint (safe booleans only). Remove or protect before production if undesired.
+  return NextResponse.json({
+    GMAIL_USER: Boolean(process.env.GMAIL_USER),
+    GMAIL_PASS: Boolean(process.env.GMAIL_PASS),
+    SMTP_USER: Boolean(process.env.SMTP_USER),
+    SMTP_APP_PASSWORD: Boolean(process.env.SMTP_APP_PASSWORD),
+    MAIL_FROM: Boolean(process.env.MAIL_FROM),
+    runtime,
+  })
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as SendEmailBody
@@ -41,13 +53,19 @@ export async function POST(request: NextRequest) {
 
     // If html not provided, load template from public and interpolate
     if (!html) {
-      const templatePath = path.join(process.cwd(), 'public', 'email-templates', 'invoice-template.html')
+      const templatePath = path.join(process.cwd(), 'public', 'email-templates', 'salary-slip.html')
       let template = await fs.readFile(templatePath, 'utf8')
       const defaults = {
         companyName: 'Ethiopian Salary Calculator',
         userName: 'Customer',
-        amount: 'ETB 0.00',
         invoiceDate: new Date().toLocaleDateString(),
+        grossSalary: 'ETB 0.00',
+        totalAllowances: 'ETB 0.00',
+        incomeTax: 'ETB 0.00',
+        pension: 'ETB 0.00',
+        netSalary: 'ETB 0.00',
+        effectiveTaxRate: '0.0%',
+        marginalTaxRate: '0%'
       }
       const vars = { ...defaults, ...(body.variables || {}) }
       html = template.replace(/{{\s*(\w+)\s*}}/g, (_, key: string) => String(vars[key] ?? ''))
