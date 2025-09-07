@@ -19,6 +19,7 @@ import { SalaryNegotiationMode } from "@/components/salary-negotiation-mode"
 import { CurrencyConverter } from "@/components/currency-converter"
 import { WhatIfCalculator } from "@/components/what-if-calculator"
 import { ExportShareOptions } from "@/components/export-share-options"
+import { sendInvoiceEmail } from "@/lib/email-client"
 import { PercentageInput } from "@/components/percentage-input"
 
 export default function EthiopianSalaryCalculator() {
@@ -88,9 +89,15 @@ export default function EthiopianSalaryCalculator() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Calculator className="h-6 w-6" />
-              </div>
+              <img
+                src="/images/ReactorTech.png"
+                alt={isAmharic ? "ሎጎ" : "Site logo"}
+                width={48}
+                height={48}
+                className="h-12 w-12 rounded-lg object-contain"
+                loading="eager"
+                decoding="async"
+              />
               <img
                 src="/images/et.svg"
                 alt={isAmharic ? "የኢትዮጵያ ባንዲራ" : "Ethiopian flag"}
@@ -310,7 +317,7 @@ export default function EthiopianSalaryCalculator() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <Label htmlFor="union-dues">{isAmharic ? "የሰራተኛ ማህበር ክፍያ" : "Union Dues"}</Label>
+                      <Label htmlFor="union-dues" className="block mb-2">{isAmharic ? "የሰራተኛ ማህበር ክፍያ" : "Union Dues"}</Label>
                       <Input
                         id="union-dues"
                         type="number"
@@ -445,6 +452,28 @@ export default function EthiopianSalaryCalculator() {
               <TabsContent value="export" className="space-y-6">
                 {/* Export & Share Options */}
                 <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
+                <div className="grid grid-cols-1 gap-3">
+                  <button
+                    className="px-3 py-2 rounded border text-sm"
+                    onClick={async () => {
+                      try {
+                        await sendInvoiceEmail({
+                          to: 'test@example.com',
+                          subject: 'Your Invoice',
+                          companyName: 'Ethiopian Salary Calculator',
+                          userName: 'Test User',
+                          amount: `${calculation.netSalary.toFixed(2)} ETB`,
+                          invoiceDate: new Date().toLocaleDateString(),
+                        })
+                        alert('Email sent')
+                      } catch (e: any) {
+                        alert(e.message)
+                      }
+                    }}
+                  >
+                    Send Test Invoice Email
+                  </button>
+                </div>
               </TabsContent>
             </Tabs>
           </div>

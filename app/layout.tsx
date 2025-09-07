@@ -57,6 +57,11 @@ export const metadata: Metadata = {
   verification: {
     google: 'your-google-verification-code',
   },
+  icons: {
+    icon: '/images/ReactorTech.png',
+    shortcut: '/images/ReactorTech.png',
+    apple: '/images/ReactorTech.png',
+  },
 }
 
 export default function RootLayout({
