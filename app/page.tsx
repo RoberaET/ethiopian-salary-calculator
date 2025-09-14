@@ -9,7 +9,7 @@
  * If you use this code, please provide proper attribution to the original author.
  */
 
-import { useState, useEffect, Suspense, lazy } from "react"
+import { useState, useEffect, Suspense, lazy, useMemo, useCallback } from "react"
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -27,30 +27,13 @@ import { OvertimeCalculator } from "@/components/overtime-calculator"
 import { SalaryBreakdownCard } from "@/components/salary-breakdown-card"
 import { sendInvoiceEmail } from "@/lib/email-client"
 import { PercentageInput } from "@/components/percentage-input"
+import { InputSection, ResultsSection, LoadingSpinner, ChartLoading } from "@/components/optimized-calculator"
 
 // Lazy load heavy components
-const SalaryVisualization = lazy(() => import("@/components/salary-visualization").then(module => ({ default: module.SalaryVisualization })))
 const DarkVeil = lazy(() => import("@/components/dark-veil"))
 const SalaryNegotiationMode = lazy(() => import("@/components/salary-negotiation-mode").then(module => ({ default: module.SalaryNegotiationMode })))
-const CurrencyConverter = lazy(() => import("@/components/currency-converter").then(module => ({ default: module.CurrencyConverter })))
-const WhatIfCalculator = lazy(() => import("@/components/what-if-calculator").then(module => ({ default: module.WhatIfCalculator })))
-const ExportShareOptions = lazy(() => import("@/components/export-share-options").then(module => ({ default: module.ExportShareOptions })))
 
-// Loading components for better UX
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center p-8">
-    <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
-  </div>
-)
-
-const ChartLoading = () => (
-  <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 rounded-lg">
-    <div className="text-center">
-      <Loader2 className="h-8 w-8 animate-spin text-orange-500 mx-auto mb-2" />
-      <p className="text-sm text-gray-600 dark:text-gray-400">Loading charts...</p>
-    </div>
-  </div>
-)
+// Main component state and logic
 
 export default function EthiopianSalaryCalculator() {
   const [inputs, setInputs] = useState<SalaryInputs>({
@@ -86,7 +69,8 @@ export default function EthiopianSalaryCalculator() {
   const salaryDay = endOfMonth(today)
   const daysLeftForSalary = Math.max(0, differenceInCalendarDays(salaryDay, today))
 
-  const calculation = calculateSalary(inputs)
+  // Memoize expensive calculation to prevent unnecessary re-computations
+  const calculation = useMemo(() => calculateSalary(inputs), [inputs])
 
   // Optimized animation variants for better performance
   const tabVariants = {
@@ -124,13 +108,18 @@ export default function EthiopianSalaryCalculator() {
     }
   }
 
-  const updateInput = (field: keyof SalaryInputs, value: any) => {
-    setInputs((prev) => ({ ...prev, [field]: value }))
+  // Memoize input update function to prevent unnecessary re-renders
+  const updateInput = useCallback((field: keyof SalaryInputs, value: any) => {
+    setInputs((prev) => {
+      // Only update if value actually changed
+      if (prev[field] === value) return prev
+      return { ...prev, [field]: value }
+    })
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }))
     }
-  }
+  }, [errors])
 
   const validateInput = (field: keyof SalaryInputs, value: number) => {
     if (value < 0) {
@@ -246,19 +235,19 @@ export default function EthiopianSalaryCalculator() {
             <div className="text-center text-white px-8 max-w-4xl">
               <h2 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
                 {isAmharic ? "ነፃ የኢትዮጵያ ደመወዝ ካልኩሌተር 2018" : "Free Ethiopian Salary Calculator 2025"}
-              </h2>
+          </h2>
               <p className="text-lg md:text-xl mb-6 drop-shadow-md opacity-90">
-                {isAmharic 
+            {isAmharic 
                   ? "ትክክለኛውን የተጣራ ደመወዝዎን ያስሉ"
                   : "Calculate Your Net Pay & Income Tax"
-                }
-              </p>
+            }
+          </p>
               <p className="text-base md:text-lg drop-shadow-md opacity-80 max-w-3xl mx-auto">
-                {isAmharic 
+            {isAmharic 
                   ? <>የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2025</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል።</>
                   : <>Our <strong>Ethiopian salary calculator</strong> helps you calculate your exact take-home pay using the latest <strong>Ethiopia tax brackets 2025</strong>.</>
-                }
-              </p>
+            }
+          </p>
             </div>
           </div>
         </section>
@@ -274,6 +263,17 @@ export default function EthiopianSalaryCalculator() {
                 isAmharic={isAmharic}
               />
             </Suspense>
+            
+            {/* Optimized Input Section */}
+            <InputSection
+              inputs={inputs}
+              updateInput={updateInput}
+              isAmharic={isAmharic}
+              date={date}
+              setDate={setDate}
+              daysLeftForSalary={daysLeftForSalary}
+              errors={errors}
+            />
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <motion.div
@@ -643,7 +643,7 @@ export default function EthiopianSalaryCalculator() {
 
                 {/* Currency Converter */}
                 <Suspense fallback={<LoadingSpinner />}>
-                  <CurrencyConverter netSalary={calculation.netSalary} isAmharic={isAmharic} />
+                <CurrencyConverter netSalary={calculation.netSalary} isAmharic={isAmharic} />
                 </Suspense>
 
                 {/* Tax Information */}
@@ -724,7 +724,7 @@ export default function EthiopianSalaryCalculator() {
                     >
                 {/* What-If Calculator */}
                 <Suspense fallback={<LoadingSpinner />}>
-                  <WhatIfCalculator baseInputs={inputs} baseCalculation={calculation} isAmharic={isAmharic} />
+                <WhatIfCalculator baseInputs={inputs} baseCalculation={calculation} isAmharic={isAmharic} />
                 </Suspense>
                     </motion.div>
                   )}
@@ -744,7 +744,7 @@ export default function EthiopianSalaryCalculator() {
                     >
                 {/* Export & Share Options */}
                 <Suspense fallback={<LoadingSpinner />}>
-                  <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
+                <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
                 </Suspense>
                     </motion.div>
                   )}
@@ -812,26 +812,26 @@ export default function EthiopianSalaryCalculator() {
           </Suspense>
           <div className="absolute inset-0 p-6 flex flex-col justify-center">
             <h2 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
-              {isAmharic ? "የእኛን የኢትዮጵያ ደመወዝ ካልኩሌተር ለምን እንጠቀም?" : "Why Use Our Ethiopian Salary Calculator?"}
-            </h2>
+            {isAmharic ? "የእኛን የኢትዮጵያ ደመወዝ ካልኩሌተር ለምን እንጠቀም?" : "Why Use Our Ethiopian Salary Calculator?"}
+          </h2>
             <ul className="space-y-3 text-white">
-              <li className="flex items-center gap-3">
+            <li className="flex items-center gap-3">
                 <span className="text-green-400 font-bold">✓</span>
-                {isAmharic ? <>በ2025 <strong>የኢትዮጵያ ታክስ ቅንጅቶች</strong> የተዘመነ</> : <>✓ Updated with 2025 <strong>Ethiopia tax brackets</strong></>}
-              </li>
-              <li className="flex items-center gap-3">
+              {isAmharic ? <>በ2025 <strong>የኢትዮጵያ ታክስ ቅንጅቶች</strong> የተዘመነ</> : <>✓ Updated with 2025 <strong>Ethiopia tax brackets</strong></>}
+            </li>
+            <li className="flex items-center gap-3">
                 <span className="text-green-400 font-bold">✓</span>
-                {isAmharic ? <>ትክክለኛ <strong>PAYE ታክስ ስሌት</strong></> : <>✓ Accurate <strong>PAYE tax calculation</strong></>}
-              </li>
-              <li className="flex items-center gap-3">
+              {isAmharic ? <>ትክክለኛ <strong>PAYE ታክስ ስሌት</strong></> : <>✓ Accurate <strong>PAYE tax calculation</strong></>}
+            </li>
+            <li className="flex items-center gap-3">
                 <span className="text-green-400 font-bold">✓</span>
-                {isAmharic ? "የጡረታ አበል (7%) ያካተተ" : "✓ Includes pension contribution (7%)"}
-              </li>
-              <li className="flex items-center gap-3">
+              {isAmharic ? "የጡረታ አበል (7%) ያካተተ" : "✓ Includes pension contribution (7%)"}
+            </li>
+            <li className="flex items-center gap-3">
                 <span className="text-green-400 font-bold">✓</span>
-                {isAmharic ? <>ነፃ <strong>የኢትዮጵያ የተጣራ ደመወዝ ካልኩሌተር</strong></> : <>✓ Free <strong>Ethiopian net salary calculator</strong></>}
-              </li>
-            </ul>
+              {isAmharic ? <>ነፃ <strong>የኢትዮጵያ የተጣራ ደመወዝ ካልኩሌተር</strong></> : <>✓ Free <strong>Ethiopian net salary calculator</strong></>}
+            </li>
+          </ul>
           </div>
         </section>
 
@@ -850,8 +850,8 @@ export default function EthiopianSalaryCalculator() {
           </Suspense>
           <div className="absolute inset-0 p-6 overflow-y-auto">
             <h2 className="text-2xl font-bold text-white mb-6 drop-shadow-lg">
-              {isAmharic ? "ተደጋግሞ የሚጠየቁ ጥያቄዎች - የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Frequently Asked Questions - Ethiopian Salary Calculator"}
-            </h2>
+            {isAmharic ? "ተደጋግሞ የሚጠየቁ ጥያቄዎች - የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Frequently Asked Questions - Ethiopian Salary Calculator"}
+          </h2>
           
           <div className="space-y-6">
             <div className="faq-item p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">

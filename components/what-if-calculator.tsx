@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
@@ -20,23 +20,29 @@ export function WhatIfCalculator({ baseInputs, baseCalculation, isAmharic }: Wha
   const [allowanceMultiplier, setAllowanceMultiplier] = useState([100])
   const [overtimeHours, setOvertimeHours] = useState([0])
 
-  // Calculate what-if scenario
-  const whatIfInputs: SalaryInputs = {
+  // Memoize what-if calculations to prevent excessive re-computations
+  const whatIfInputs = useMemo((): SalaryInputs => ({
     ...baseInputs,
     grossSalary: (baseInputs.grossSalary * salaryMultiplier[0]) / 100,
     transportAllowance: (baseInputs.transportAllowance * allowanceMultiplier[0]) / 100,
     housingAllowance: (baseInputs.housingAllowance * allowanceMultiplier[0]) / 100,
     medicalAllowance: (baseInputs.medicalAllowance * allowanceMultiplier[0]) / 100,
     overtimePay: (baseInputs.grossSalary / (30 * 8)) * overtimeHours[0] * 1.5, // Assuming 1.5x rate
-  }
+  }), [baseInputs, salaryMultiplier, allowanceMultiplier, overtimeHours])
 
-  const whatIfCalculation = calculateSalary(whatIfInputs)
+  const whatIfCalculation = useMemo(() => calculateSalary(whatIfInputs), [whatIfInputs])
 
-  // Calculate differences
-  const netSalaryDiff = whatIfCalculation.netSalary - baseCalculation.netSalary
-  const netSalaryPercent = (netSalaryDiff / baseCalculation.netSalary) * 100
-  const taxDiff = whatIfCalculation.incomeTax - baseCalculation.incomeTax
-  const taxPercent = baseCalculation.incomeTax > 0 ? (taxDiff / baseCalculation.incomeTax) * 100 : 0
+  // Memoize difference calculations
+  const differences = useMemo(() => {
+    const netSalaryDiff = whatIfCalculation.netSalary - baseCalculation.netSalary
+    const netSalaryPercent = baseCalculation.netSalary > 0 ? (netSalaryDiff / baseCalculation.netSalary) * 100 : 0
+    const taxDiff = whatIfCalculation.incomeTax - baseCalculation.incomeTax
+    const taxPercent = baseCalculation.incomeTax > 0 ? (taxDiff / baseCalculation.incomeTax) * 100 : 0
+    
+    return { netSalaryDiff, netSalaryPercent, taxDiff, taxPercent }
+  }, [whatIfCalculation, baseCalculation])
+
+  const { netSalaryDiff, netSalaryPercent, taxDiff, taxPercent } = differences
 
   return (
     <Card>

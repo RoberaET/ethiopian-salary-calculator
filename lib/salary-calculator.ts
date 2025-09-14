@@ -255,25 +255,31 @@ export function formatNumber(amount: number): string {
 }
 
 // Reverse calculation: find gross salary for desired net salary
+// Optimized with early exit and reduced iterations
 export function calculateRequiredGrossSalary(
   desiredNetSalary: number,
   allowances: Omit<SalaryInputs, "grossSalary">,
 ): number {
+  // Early exit for edge cases
+  if (desiredNetSalary <= 0) return 0
+  
   let low = 0
-  let high = desiredNetSalary * 3 // Start with a reasonable upper bound
+  let high = Math.min(desiredNetSalary * 2, 100000) // Reduced upper bound
   let iterations = 0
-  const maxIterations = 50
-  const tolerance = 1 // ETB tolerance
+  const maxIterations = 20 // Reduced from 50
+  const tolerance = 5 // Increased tolerance for faster convergence
 
+  // Use a more efficient binary search with early termination
   while (low <= high && iterations < maxIterations) {
     const mid = Math.floor((low + high) / 2)
     const calculation = calculateSalary({ ...allowances, grossSalary: mid })
+    const difference = calculation.netSalary - desiredNetSalary
 
-    if (Math.abs(calculation.netSalary - desiredNetSalary) <= tolerance) {
+    if (Math.abs(difference) <= tolerance) {
       return mid
     }
 
-    if (calculation.netSalary < desiredNetSalary) {
+    if (difference < 0) {
       low = mid + 1
     } else {
       high = mid - 1

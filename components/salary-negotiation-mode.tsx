@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -22,30 +22,42 @@ export function SalaryNegotiationMode({ inputs, onGrossSalaryChange, isAmharic }
   const [calculatedGrossSalary, setCalculatedGrossSalary] = useState(0)
   const [isCalculating, setIsCalculating] = useState(false)
 
+  // Memoize the calculation to prevent excessive re-computations
+  const calculatedGross = useMemo(() => {
+    if (!isNegotiationMode || desiredNetSalary <= 0) return 0
+    
+    const allowancesOnly = {
+      ...inputs,
+      grossSalary: 0, // Will be calculated
+    }
+    return calculateRequiredGrossSalary(desiredNetSalary, allowancesOnly)
+  }, [isNegotiationMode, desiredNetSalary, inputs])
+
   useEffect(() => {
     if (isNegotiationMode && desiredNetSalary > 0) {
       setIsCalculating(true)
       const timer = setTimeout(() => {
-        const allowancesOnly = {
-          ...inputs,
-          grossSalary: 0, // Will be calculated
-        }
-        const requiredGross = calculateRequiredGrossSalary(desiredNetSalary, allowancesOnly)
-        setCalculatedGrossSalary(requiredGross)
+        setCalculatedGrossSalary(calculatedGross)
         setIsCalculating(false)
-      }, 500)
+      }, 300) // Reduced delay
 
       return () => clearTimeout(timer)
     }
-  }, [desiredNetSalary, inputs, isNegotiationMode])
+  }, [calculatedGross, isNegotiationMode, desiredNetSalary])
 
-  const applyCalculatedSalary = () => {
+  const applyCalculatedSalary = useCallback(() => {
     onGrossSalaryChange(calculatedGrossSalary)
     setIsNegotiationMode(false)
-  }
+  }, [onGrossSalaryChange, calculatedGrossSalary])
 
-  const difference = calculatedGrossSalary - inputs.grossSalary
-  const percentageIncrease = inputs.grossSalary > 0 ? (difference / inputs.grossSalary) * 100 : 0
+  // Memoize expensive calculations
+  const salaryAnalysis = useMemo(() => {
+    const difference = calculatedGrossSalary - inputs.grossSalary
+    const percentageIncrease = inputs.grossSalary > 0 ? (difference / inputs.grossSalary) * 100 : 0
+    return { difference, percentageIncrease }
+  }, [calculatedGrossSalary, inputs.grossSalary])
+
+  const { difference, percentageIncrease } = salaryAnalysis
 
   return (
     <Card className="border-secondary">

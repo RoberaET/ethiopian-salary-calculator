@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type MouseEvent as ReactMouseEvent } from "react"
+import { useState, memo, useMemo, useCallback, type MouseEvent as ReactMouseEvent } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,7 @@ interface SalaryBreakdownCardProps {
   isAmharic: boolean
 }
 
-export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBreakdownCardProps) {
+const SalaryBreakdownCard = memo(function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBreakdownCardProps) {
   // Helper function to get deductible amount for each tax bracket
   const getDeductibleAmount = (bracket: { min: number; max: number | null; rate: number; label: string }): number => {
     if (bracket.min <= 2000) return 0
@@ -37,20 +37,26 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
     taxBreakdown: false,
   })
 
-  const toggleSection = (section: string) => {
+  const toggleSection = useCallback((section: string) => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }))
-  }
+  }, [])
 
   const multiplier = isAnnualView ? 12 : 1
   const periodLabel = isAnnualView ? (isAmharic ? "ዓመታዊ" : "Annual") : isAmharic ? "ወራዊ" : "Monthly"
 
-  // Calculate savings rate (assuming some basic living expenses)
-  const estimatedExpenses = Math.round((calculation.netSalary * 0.7) * 100) / 100 // Assume 70% for expenses
-  const potentialSavings = Math.round((calculation.netSalary - estimatedExpenses) * 100) / 100
-  const savingsRate = Math.round(((potentialSavings / calculation.netSalary) * 100) * 100) / 100
-  const dailyGrossSalary = Math.round(((calculation.grossSalary + inputs.overtimePay) / 30) * 100) / 100
-  const dailyTax = Math.round((calculation.incomeTax / 30) * 100) / 100
-  const dailyNetIncome = Math.round((calculation.netSalary / 30) * 100) / 100
+  // Memoize expensive calculations
+  const financialMetrics = useMemo(() => {
+    const estimatedExpenses = Math.round((calculation.netSalary * 0.7) * 100) / 100 // Assume 70% for expenses
+    const potentialSavings = Math.round((calculation.netSalary - estimatedExpenses) * 100) / 100
+    const savingsRate = Math.round(((potentialSavings / calculation.netSalary) * 100) * 100) / 100
+    const dailyGrossSalary = Math.round(((calculation.grossSalary + inputs.overtimePay) / 30) * 100) / 100
+    const dailyTax = Math.round((calculation.incomeTax / 30) * 100) / 100
+    const dailyNetIncome = Math.round((calculation.netSalary / 30) * 100) / 100
+    
+    return { estimatedExpenses, potentialSavings, savingsRate, dailyGrossSalary, dailyTax, dailyNetIncome }
+  }, [calculation.netSalary, calculation.grossSalary, calculation.incomeTax, inputs.overtimePay])
+
+  const { estimatedExpenses, potentialSavings, savingsRate, dailyGrossSalary, dailyTax, dailyNetIncome } = financialMetrics
 
   // Values shown in the highlight metrics depend on Monthly vs Annual view
   const leftMetricValue = isAnnualView
@@ -745,4 +751,6 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
       </Card>
     </div>
   )
-}
+})
+
+export { SalaryBreakdownCard }

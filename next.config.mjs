@@ -1,3 +1,9 @@
+import withBundleAnalyzer from '@next/bundle-analyzer'
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -8,7 +14,67 @@ const nextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion', 'recharts'],
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+  // Webpack optimizations
+  webpack: (config, { dev, isServer }) => {
+    if (!dev && !isServer) {
+      // Aggressive minification
+      config.optimization.minimize = true
+      config.optimization.minimizer = config.optimization.minimizer || []
+      
+      // Tree shaking optimizations
+      config.optimization.usedExports = true
+      config.optimization.sideEffects = false
+      
+      // Chunk splitting for better caching
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 10,
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+          ui: {
+            test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+            name: 'ui',
+            chunks: 'all',
+            priority: 15,
+          },
+          charts: {
+            test: /[\\/]node_modules[\\/](recharts|d3)[\\/]/,
+            name: 'charts',
+            chunks: 'all',
+            priority: 15,
+          },
+          motion: {
+            test: /[\\/]node_modules[\\/](framer-motion|motion)[\\/]/,
+            name: 'motion',
+            chunks: 'all',
+            priority: 15,
+          },
+        },
+      }
+    }
+    
+    return config
   },
   // Image optimization
   images: {
@@ -73,4 +139,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default bundleAnalyzer(nextConfig)

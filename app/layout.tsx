@@ -238,20 +238,24 @@ export default function RootLayout({
           }}
         />
         
-        {/* Google Analytics 4 - Deferred Loading */}
+        {/* Google Analytics 4 - Load after window.onload */}
         <script
-          defer
-          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
-        />
-        <script
-          defer
           dangerouslySetInnerHTML={{
             __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'GA_MEASUREMENT_ID', {
-                send_page_view: false
+              window.addEventListener('load', function() {
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID';
+                document.head.appendChild(script);
+                
+                script.onload = function() {
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', 'GA_MEASUREMENT_ID', {
+                    send_page_view: false
+                  });
+                };
               });
             `
           }}
