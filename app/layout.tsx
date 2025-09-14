@@ -100,6 +100,21 @@ export default function RootLayout({
         <meta name="twitter:creator" content="@EthiopianSalaryCalc" />
         <meta name="twitter:site" content="@EthiopianSalaryCalc" />
         
+        {/* Trusted Types Policy */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (window.trustedTypes && window.trustedTypes.createPolicy) {
+                window.trustedTypes.createPolicy('default', {
+                  createHTML: (string) => string,
+                  createScript: (string) => string,
+                  createScriptURL: (string) => string,
+                });
+              }
+            `
+          }}
+        />
+        
         {/* Critical CSS and font optimization */}
         <style
           dangerouslySetInnerHTML={{
