@@ -34,18 +34,10 @@ const nextConfig = {
     // Remove console.log in production
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // Disable webpack caching to fix chunk loading issues
-  webpack: (config, { dev, isServer }) => {
-    // Disable caching completely to prevent chunk loading errors
-    config.cache = false
-    
-    // Disable webpack's persistent caching
-    if (config.optimization && config.optimization.splitChunks) {
-      config.optimization.splitChunks = false
-    }
-    
-    return config
-  },
+  // Temporarily disable webpack config to fix CSS loading
+  // webpack: (config, { dev, isServer }) => {
+  //   return config
+  // },
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],
