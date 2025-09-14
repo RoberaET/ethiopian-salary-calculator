@@ -25,6 +25,7 @@ import { endOfMonth, differenceInCalendarDays } from "date-fns"
 import { OvertimeCalculator } from "@/components/overtime-calculator"
 import { SalaryBreakdownCard } from "@/components/salary-breakdown-card"
 import { SalaryVisualization } from "@/components/salary-visualization"
+import DarkVeil from "@/components/dark-veil"
 import { SalaryNegotiationMode } from "@/components/salary-negotiation-mode"
 import { CurrencyConverter } from "@/components/currency-converter"
 import { WhatIfCalculator } from "@/components/what-if-calculator"
@@ -203,23 +204,36 @@ export default function EthiopianSalaryCalculator() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* SEO Content Section - Before Calculator */}
-        <section className="seo-content mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            {isAmharic ? "ነፃ የኢትዮጵያ ደመወዝ ካልኩሌተር 2025" : "Free Ethiopian Salary Calculator 2025 - Calculate Your Net Pay & Income Tax"}
-          </h2>
-          <p className="text-gray-700 mb-4">
-            {isAmharic 
-              ? <>የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2025</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል። ይህ ነፃ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> የአሁኑን PAYE ተመኖች በመተግበር ከገቢ ታክስ እና የጡረታ አበል በኋላ የተጣራ ደመወዝዎን ይወስናል። <a href="#faq-section" className="text-blue-600 hover:text-blue-800 underline">ተደጋግሞ የሚጠየቁ ጥያቄዎች</a> ይመልከቱ።</>
-              : <>Our <strong>Ethiopian salary calculator</strong> helps you calculate your exact take-home pay using the latest <strong>Ethiopia tax brackets 2025</strong>. This free <strong>Ethiopian income tax calculator</strong> applies current PAYE rates to determine your net salary after income tax and pension contributions. Check our <a href="#faq-section" className="text-blue-600 hover:text-blue-800 underline">Frequently Asked Questions</a> for more details.</>
-            }
-          </p>
-          <p className="text-gray-700">
-            {isAmharic 
-              ? <>የደመወዝ ድርድር እና የገንዘብ አያያዝ እቅድ ብትዘጋጁም፣ የእኛ <strong>የኢትዮጵያ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 ታክስ ተመኖች በመመስረት ትክክለኛ ውጤቶችን ይሰጣል።</>
-              : <>Whether you're planning salary negotiations or budgeting your finances, our <strong>Ethiopia tax calculator</strong> provides accurate results based on Proclamation No. 1395/2025 tax rates.</>
-            }
-          </p>
+        {/* Dark Veil Background Section */}
+        <section className="mb-8 rounded-lg overflow-hidden relative" style={{ width: '100%', height: '600px' }}>
+          <DarkVeil 
+            hueShift={45}
+            noiseIntensity={0.02}
+            scanlineIntensity={0.1}
+            speed={0.3}
+            scanlineFrequency={2.0}
+            warpAmount={0.1}
+            resolutionScale={1}
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white px-8 max-w-4xl">
+              <h2 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+                {isAmharic ? "ነፃ የኢትዮጵያ ደመወዝ ካልኩሌተር 2025" : "Free Ethiopian Salary Calculator 2025"}
+              </h2>
+              <p className="text-lg md:text-xl mb-6 drop-shadow-md opacity-90">
+                {isAmharic 
+                  ? "ትክክለኛውን የተጣራ ደመወዝዎን ያስሉ"
+                  : "Calculate Your Net Pay & Income Tax"
+                }
+              </p>
+              <p className="text-base md:text-lg drop-shadow-md opacity-80 max-w-3xl mx-auto">
+                {isAmharic 
+                  ? <>የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2025</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል።</>
+                  : <>Our <strong>Ethiopian salary calculator</strong> helps you calculate your exact take-home pay using the latest <strong>Ethiopia tax brackets 2025</strong>.</>
+                }
+              </p>
+            </div>
+          </div>
         </section>
 
         <div className="grid gap-8 lg:grid-cols-2">

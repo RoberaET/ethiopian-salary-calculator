@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ComposedChart } from "recharts"
 import { formatCurrency, type SalaryCalculation } from "@/lib/salary-calculator"
 
 interface SalaryVisualizationProps {
@@ -29,11 +29,12 @@ export function SalaryVisualization({ calculation, isAmharic }: SalaryVisualizat
     }
   ]
 
-  // Data for bar chart - tax brackets comparison
+  // Data for stacked bar chart - tax brackets breakdown
   const barData = calculation.taxBracketDetails.map((detail, index) => ({
     bracket: `${(detail.bracket.rate * 100).toFixed(0)}%`,
     taxableAmount: detail.taxableAmount,
     taxAmount: detail.taxAmount,
+    netAmount: detail.taxableAmount - detail.taxAmount,
     rate: detail.bracket.rate * 100
   }))
 
@@ -53,19 +54,26 @@ export function SalaryVisualization({ calculation, isAmharic }: SalaryVisualizat
     return null
   }
 
-  // Custom tooltip for bar chart
+  // Custom tooltip for stacked bar chart
   const CustomBarTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload
       return (
         <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg">
           <p className="font-semibold text-gray-800 dark:text-gray-200">{isAmharic ? "የታክስ ደረጃ" : "Tax Bracket"}: {label}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {isAmharic ? "የታክስ ገቢ" : "Taxable Amount"}: {formatCurrency(data.taxableAmount)}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {isAmharic ? "ታክስ" : "Tax"}: {formatCurrency(data.taxAmount)}
-          </p>
+          <div className="space-y-1">
+            {payload.map((entry: any, index: number) => (
+              <div key={index} className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-sm" 
+                  style={{ backgroundColor: entry.color }}
+                />
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {entry.name}: {formatCurrency(entry.value)}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       )
     }
@@ -159,13 +167,15 @@ export function SalaryVisualization({ calculation, isAmharic }: SalaryVisualizat
                 />
                 <Tooltip content={<CustomBarTooltip />} />
                 <Bar 
-                  dataKey="taxableAmount" 
-                  fill="#3b82f6" 
-                  name={isAmharic ? "የታክስ ገቢ" : "Taxable Amount"}
-                  radius={[4, 4, 0, 0]}
+                  dataKey="netAmount" 
+                  stackId="a"
+                  fill="#10b981" 
+                  name={isAmharic ? "ተጣራ ገቢ" : "Net Amount"}
+                  radius={[0, 0, 4, 4]}
                 />
                 <Bar 
                   dataKey="taxAmount" 
+                  stackId="a"
                   fill="#ef4444" 
                   name={isAmharic ? "ታክስ" : "Tax Amount"}
                   radius={[4, 4, 0, 0]}

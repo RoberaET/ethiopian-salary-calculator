@@ -10,8 +10,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronDown, ChevronUp, TrendingUp, Calendar, FileText } from "lucide-react"
 import { formatCurrency, type SalaryCalculation, type SalaryInputs } from "@/lib/salary-calculator"
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion"
-import { endOfMonth, differenceInCalendarDays } from "date-fns"
+// Custom 30-day month calendar system
 import { Calendar as UiCalendar } from "@/components/ui/calendar"
+import CountUp from "@/components/count-up"
 
 interface SalaryBreakdownCardProps {
   calculation: SalaryCalculation
@@ -44,27 +45,27 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
   const periodLabel = isAnnualView ? (isAmharic ? "ዓመታዊ" : "Annual") : isAmharic ? "ወራዊ" : "Monthly"
 
   // Calculate savings rate (assuming some basic living expenses)
-  const estimatedExpenses = calculation.netSalary * 0.7 // Assume 70% for expenses
-  const potentialSavings = calculation.netSalary - estimatedExpenses
-  const savingsRate = (potentialSavings / calculation.netSalary) * 100
-  const dailyGrossSalary = (calculation.grossSalary + inputs.overtimePay) / 30
-  const dailyTax = calculation.incomeTax / 30
-  const dailyNetIncome = calculation.netSalary / 30
+  const estimatedExpenses = Math.round((calculation.netSalary * 0.7) * 100) / 100 // Assume 70% for expenses
+  const potentialSavings = Math.round((calculation.netSalary - estimatedExpenses) * 100) / 100
+  const savingsRate = Math.round(((potentialSavings / calculation.netSalary) * 100) * 100) / 100
+  const dailyGrossSalary = Math.round(((calculation.grossSalary + inputs.overtimePay) / 30) * 100) / 100
+  const dailyTax = Math.round((calculation.incomeTax / 30) * 100) / 100
+  const dailyNetIncome = Math.round((calculation.netSalary / 30) * 100) / 100
 
   // Values shown in the highlight metrics depend on Monthly vs Annual view
   const leftMetricValue = isAnnualView
-    ? (calculation.grossSalary + inputs.overtimePay) * 12
+    ? Math.round(((calculation.grossSalary + inputs.overtimePay) * 12) * 100) / 100
     : dailyGrossSalary
   const leftMetricLabel = isAnnualView
     ? (isAmharic ? "ዓመታዊ ጠቅላላ ክፍያ" : "Annual Gross Pay")
     : (isAmharic ? "የቀን ጠቅላላ ደመወዝ (÷30)" : "Daily Gross (÷30)")
 
-  const middleMetricValue = isAnnualView ? calculation.incomeTax * 12 : dailyTax
+  const middleMetricValue = isAnnualView ? Math.round((calculation.incomeTax * 12) * 100) / 100 : dailyTax
   const middleMetricLabel = isAnnualView
     ? (isAmharic ? "ዓመታዊ ታክስ" : "Annual Tax")
     : (isAmharic ? "የቀን ታክስ" : "Daily Tax")
 
-  const rightMetricValue = isAnnualView ? (calculation.netSalary * 12) / 30 : dailyNetIncome
+  const rightMetricValue = isAnnualView ? Math.round(((calculation.netSalary * 12) / 30) * 100) / 100 : dailyNetIncome
   const rightMetricLabel = isAnnualView
     ? (isAmharic ? "ዓመታዊ የቀን የተጣራ ገቢ" : "Annual Net Daily Income")
     : (isAmharic ? "የቀን የተጣራ ደመወዝ (÷30)" : "Daily Net Income (÷30)")
@@ -79,11 +80,22 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
   }
   const background = useMotionTemplate`radial-gradient(650px circle at ${mouseX}px ${mouseY}px, rgba(14, 165, 233, 0.15), transparent 80%)`
 
-  // Calendar and days left for salary (assume salary day is end of month)
-  const [calendarDate, setCalendarDate] = useState<Date | undefined>(new Date())
-  const today = new Date()
-  const salaryDay = endOfMonth(today)
-  const daysLeftForSalary = Math.max(0, differenceInCalendarDays(salaryDay, today))
+  // Custom 30-day month calendar system
+  const [calendarDate, setCalendarDate] = useState<Date | undefined>(new Date(2018, 8, 4))
+  
+  // Set today as September 4th, 2018
+  const today = new Date(2018, 8, 4) // Month is 0-indexed, so 8 = September
+  
+  // Calculate days left for salary (end of month = 30th)
+  const currentDay = today.getDate()
+  const daysLeftForSalary = Math.max(0, 30 - currentDay)
+  
+  // Get current month name
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ]
+  const currentMonth = monthNames[today.getMonth()]
 
   return (
     <div className="space-y-6">
@@ -111,6 +123,19 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
         </div>
       </div>
 
+      {/* Current Date and Days Left for Salary */}
+      <div className="text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-lg">
+          <Calendar className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm text-muted-foreground">
+            {isAmharic 
+              ? `ዛሬ: ${currentMonth} ${currentDay}, 2018 - ${daysLeftForSalary} ቀናት የተቀረው`
+              : `Today: ${currentMonth} ${currentDay}, 2018 - ${daysLeftForSalary} days left for salary`
+            }
+          </span>
+        </div>
+      </div>
+
       {/* Net Salary Highlight with Spotlight hover */}
       <Card
         className="relative group overflow-hidden border-primary bg-gradient-to-r from-primary/5 to-secondary/5"
@@ -126,7 +151,14 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
             <span className="text-sm font-medium text-muted-foreground">{periodLabel}</span>
           </div>
           <CardTitle className="text-4xl font-bold text-primary">
-            {formatCurrency(calculation.netSalary * multiplier)}
+            <CountUp
+              from={0}
+              to={calculation.netSalary * multiplier}
+              separator=","
+              direction="up"
+              duration={0.15}
+              className="count-up-text"
+            />
           </CardTitle>
           <p className="text-lg text-muted-foreground">{isAmharic ? "የተጣራ ደመወዝ" : "Net Take-Home Pay"}</p>
         </CardHeader>
@@ -134,17 +166,43 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
             <div>
               <p className="text-2xl font-semibold text-secondary">
-                {formatCurrency(leftMetricValue)}
+                <CountUp
+                  from={0}
+                  to={leftMetricValue}
+                  separator=","
+                  direction="up"
+                  duration={0.1}
+                  delay={0.01}
+                  className="count-up-text"
+                />
               </p>
               <p className="text-xs text-muted-foreground">{leftMetricLabel}</p>
             </div>
             <div>
-              <p className="text-2xl font-semibold text-accent">{formatCurrency(middleMetricValue)}</p>
+              <p className="text-2xl font-semibold text-accent">
+                <CountUp
+                  from={0}
+                  to={middleMetricValue}
+                  separator=","
+                  direction="up"
+                  duration={0.1}
+                  delay={0.02}
+                  className="count-up-text"
+                />
+              </p>
               <p className="text-xs text-muted-foreground">{middleMetricLabel}</p>
             </div>
             <div>
               <p className="text-2xl font-semibold text-primary">
-                {formatCurrency(rightMetricValue)}
+                <CountUp
+                  from={0}
+                  to={rightMetricValue}
+                  separator=","
+                  direction="up"
+                  duration={0.1}
+                  delay={0.03}
+                  className="count-up-text"
+                />
               </p>
               <p className="text-xs text-muted-foreground">{rightMetricLabel}</p>
             </div>
@@ -640,7 +698,7 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
           <div>
             <div className="flex justify-between mb-2">
               <span className="text-sm">{isAmharic ? "የታክስ ውጤታማነት" : "Tax Efficiency"}</span>
-              <span className="text-sm font-semibold">{(100 - calculation.effectiveTaxRate * 100).toFixed(1)}%</span>
+              <span className="text-sm font-semibold">{(100 - calculation.effectiveTaxRate * 100).toFixed(2)}%</span>
             </div>
             <Progress value={100 - calculation.effectiveTaxRate * 100} className="h-2" />
           </div>
@@ -649,7 +707,7 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
           <div>
             <div className="flex justify-between mb-2">
               <span className="text-sm">{isAmharic ? "የቁጠባ አቅም" : "Savings Potential"}</span>
-              <span className="text-sm font-semibold">{savingsRate.toFixed(0)}%</span>
+              <span className="text-sm font-semibold">{savingsRate.toFixed(2)}%</span>
             </div>
             <Progress value={Math.max(0, savingsRate)} className="h-2" />
             <p className="text-xs text-muted-foreground mt-1">
@@ -666,7 +724,7 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
               <span className="text-sm font-semibold">
                 {(
                   (calculation.netSalary / (calculation.grossSalary + inputs.overtimePay)) * 100
-                ).toFixed(1)}
+                ).toFixed(2)}
                 %
               </span>
             </div>
