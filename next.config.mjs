@@ -14,15 +14,16 @@ const nextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion', 'recharts', 'date-fns'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
+    // Temporarily disable experimental features to fix chunk loading
+    // optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion', 'recharts', 'date-fns'],
+    // turbo: {
+    //   rules: {
+    //     '*.svg': {
+    //       loaders: ['@svgr/webpack'],
+    //       as: '*.js',
+    //     },
+    //   },
+    // },
     // Enable modern JavaScript features
     esmExternals: 'loose',
     // Optimize CSS
@@ -33,98 +34,24 @@ const nextConfig = {
     // Remove console.log in production
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // Webpack optimizations
+  // Simplified webpack configuration to fix chunk loading issues
   webpack: (config, { dev, isServer }) => {
-    // Modern JavaScript optimizations
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      // Keep date-fns as is to avoid ESM issues
-    }
-    
-    // Enable modern JavaScript features
-    config.experiments = {
-      ...config.experiments,
-      topLevelAwait: true,
-    }
-    
+    // Basic optimizations only
     if (!dev && !isServer) {
-      // Aggressive minification
-      config.optimization.minimize = true
-      config.optimization.minimizer = config.optimization.minimizer || []
-      
-      // Tree shaking optimizations
-      config.optimization.usedExports = true
-      config.optimization.sideEffects = false
-      
-      // Modern JavaScript target
-      config.target = ['web', 'es2020']
-      
-      // Module concatenation for better performance
-      config.optimization.concatenateModules = true
-      
-      // Advanced chunk splitting for better tree shaking
+      // Simple chunk splitting
       config.optimization.splitChunks = {
         chunks: 'all',
-        minSize: 20000,
-        maxSize: 244000,
         cacheGroups: {
-          // Core React libraries
-          react: {
-            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            name: 'react',
-            chunks: 'all',
-            priority: 20,
-            enforce: true,
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
           },
-          // UI libraries
-          ui: {
-            test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
-            name: 'ui',
-            chunks: 'all',
-            priority: 18,
-            enforce: true,
-          },
-          // Animation libraries
-          motion: {
-            test: /[\\/]node_modules[\\/](framer-motion|motion)[\\/]/,
-            name: 'motion',
-            chunks: 'all',
-            priority: 16,
-            enforce: true,
-          },
-          // Chart libraries
-          charts: {
-            test: /[\\/]node_modules[\\/](recharts|d3)[\\/]/,
-            name: 'charts',
-            chunks: 'all',
-            priority: 16,
-            enforce: true,
-          },
-          // Date utilities
-          date: {
-            test: /[\\/]node_modules[\\/]date-fns[\\/]/,
-            name: 'date',
-            chunks: 'all',
-            priority: 14,
-            enforce: true,
-          },
-          // Other vendor libraries
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
+            priority: -10,
             chunks: 'all',
-            priority: 10,
-            minChunks: 1,
-            reuseExistingChunk: true,
-          },
-          // Common chunks
-          common: {
-            name: 'common',
-            minChunks: 2,
-            chunks: 'all',
-            priority: 5,
-            reuseExistingChunk: true,
-            enforce: true,
           },
         },
       }
