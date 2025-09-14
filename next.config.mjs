@@ -34,27 +34,14 @@ const nextConfig = {
     // Remove console.log in production
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // Simplified webpack configuration to fix chunk loading issues
+  // Disable webpack caching to fix chunk loading issues
   webpack: (config, { dev, isServer }) => {
-    // Basic optimizations only
-    if (!dev && !isServer) {
-      // Simple chunk splitting
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        cacheGroups: {
-          default: {
-            minChunks: 2,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            priority: -10,
-            chunks: 'all',
-          },
-        },
-      }
+    // Disable caching completely to prevent chunk loading errors
+    config.cache = false
+    
+    // Disable webpack's persistent caching
+    if (config.optimization && config.optimization.splitChunks) {
+      config.optimization.splitChunks = false
     }
     
     return config
