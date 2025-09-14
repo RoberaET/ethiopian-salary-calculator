@@ -119,18 +119,20 @@ export function SalaryVisualization({ calculation, isAmharic }: SalaryVisualizat
             </ResponsiveContainer>
           </div>
           
-          {/* Summary Stats */}
-          <div className="grid grid-cols-3 gap-4 mt-4">
+          {/* Summary Stats - Mobile Optimized */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
             {pieData.map((item, index) => (
-              <div key={index} className="text-center p-3 rounded-lg" style={{ backgroundColor: `${item.color}10` }}>
-                <div className="flex items-center justify-center gap-2 mb-1">
+              <div key={index} className="text-center p-3 sm:p-4 rounded-lg" style={{ backgroundColor: `${item.color}10` }}>
+                <div className="flex items-center justify-center gap-2 mb-2">
                   <div 
-                    className="w-3 h-3 rounded-full" 
+                    className="w-3 h-3 rounded-full flex-shrink-0" 
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.name}</span>
+                  <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+                    {item.name}
+                  </span>
                 </div>
-                <p className="text-lg font-bold" style={{ color: item.color }}>
+                <p className="text-base sm:text-lg font-bold mb-1" style={{ color: item.color }}>
                   {formatCurrency(item.value)}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -152,18 +154,20 @@ export function SalaryVisualization({ calculation, isAmharic }: SalaryVisualizat
         <CardContent>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <BarChart data={barData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="opacity-30" />
                 <XAxis 
                   dataKey="bracket" 
-                  tick={{ fontSize: 12, fill: 'currentColor' }}
+                  tick={{ fontSize: 10, fill: 'currentColor' }}
                   angle={-45}
                   textAnchor="end"
                   height={60}
+                  interval={0}
                 />
                 <YAxis 
-                  tick={{ fontSize: 12, fill: 'currentColor' }}
+                  tick={{ fontSize: 10, fill: 'currentColor' }}
                   tickFormatter={(value) => formatCurrency(value)}
+                  width={60}
                 />
                 <Tooltip content={<CustomBarTooltip />} />
                 <Bar 
@@ -181,7 +185,7 @@ export function SalaryVisualization({ calculation, isAmharic }: SalaryVisualizat
                   radius={[4, 4, 0, 0]}
                 />
                 <Legend 
-                  wrapperStyle={{ color: 'currentColor' }}
+                  wrapperStyle={{ color: 'currentColor', fontSize: '12px' }}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -197,27 +201,27 @@ export function SalaryVisualization({ calculation, isAmharic }: SalaryVisualizat
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <h4 className="font-semibold text-blue-800 mb-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2 text-sm sm:text-base">
                 {isAmharic ? "ውጤታማ ታክስ መጠን" : "Effective Tax Rate"}
               </h4>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
                 {(calculation.effectiveTaxRate * 100).toFixed(1)}%
               </p>
-              <p className="text-sm text-blue-600">
+              <p className="text-xs sm:text-sm text-blue-600 dark:text-blue-400">
                 {isAmharic ? "በጠቅላላ ገቢ ላይ" : "On total income"}
               </p>
             </div>
             
-            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-              <h4 className="font-semibold text-green-800 mb-2">
+            <div className="p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+              <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2 text-sm sm:text-base">
                 {isAmharic ? "የተጣራ ደመወዝ መቶኛ" : "Net Salary Percentage"}
               </h4>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
                 {((calculation.netSalary / calculation.grossSalary) * 100).toFixed(1)}%
               </p>
-              <p className="text-sm text-green-600">
+              <p className="text-xs sm:text-sm text-green-600 dark:text-green-400">
                 {isAmharic ? "ከጠቅላላ ደመወዝ" : "Of gross salary"}
               </p>
             </div>

@@ -69,42 +69,39 @@ export default function EthiopianSalaryCalculator() {
 
   const calculation = calculateSalary(inputs)
 
-  // Animation variants for tab content
+  // Optimized animation variants for better performance
   const tabVariants = {
     hidden: { 
       opacity: 0, 
-      x: 30,
-      scale: 0.95
+      y: 10
     },
     visible: { 
       opacity: 1, 
-      x: 0,
-      scale: 1,
+      y: 0,
       transition: {
-        duration: 0.4,
-        ease: [0.4, 0, 0.2, 1]
+        duration: 0.2,
+        ease: "easeOut"
       }
     },
     exit: { 
       opacity: 0, 
-      x: -30,
-      scale: 0.95,
+      y: -10,
       transition: {
-        duration: 0.3,
-        ease: [0.4, 0, 0.2, 1]
+        duration: 0.15,
+        ease: "easeIn"
       }
     }
   }
 
-  // Animation variants for tab triggers
+  // Simplified tab trigger variants for better performance
   const tabTriggerVariants = {
     hover: { 
-      scale: 1.02,
-      transition: { duration: 0.2 }
+      scale: 1.01,
+      transition: { duration: 0.15, ease: "easeOut" }
     },
     tap: { 
-      scale: 0.98,
-      transition: { duration: 0.1 }
+      scale: 0.99,
+      transition: { duration: 0.1, ease: "easeIn" }
     }
   }
 
@@ -170,7 +167,6 @@ export default function EthiopianSalaryCalculator() {
                 height={48}
                 className="h-8 w-8 sm:h-12 sm:w-12 rounded-lg object-contain"
                 loading="eager"
-                priority
                 decoding="async"
               />
               <img
@@ -213,7 +209,7 @@ export default function EthiopianSalaryCalculator() {
           {isAmharic ? "ወደ ካልኩሌተር ይሂዱ" : "Skip to Calculator"}
         </a>
         {/* Dark Veil Background Section */}
-        <section className="mb-8 rounded-lg overflow-hidden relative" style={{ width: '100%', height: '600px' }}>
+        <section className="mb-8 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: '600px' }}>
           <DarkVeil 
             hueShift={45}
             noiseIntensity={0.02}
@@ -265,7 +261,7 @@ export default function EthiopianSalaryCalculator() {
                   variants={tabTriggerVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="w-full"
+                  className="w-full motion-safe"
                 >
                   <TabsTrigger 
                     value="basic" 
@@ -279,7 +275,7 @@ export default function EthiopianSalaryCalculator() {
                   variants={tabTriggerVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="w-full"
+                  className="w-full motion-safe"
                 >
                   <TabsTrigger 
                     value="allowances" 
@@ -293,7 +289,7 @@ export default function EthiopianSalaryCalculator() {
                   variants={tabTriggerVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="w-full"
+                  className="w-full motion-safe"
                 >
                   <TabsTrigger 
                     value="deductions" 
@@ -315,7 +311,7 @@ export default function EthiopianSalaryCalculator() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="space-y-6"
+                      className="space-y-6 motion-safe"
                     >
                 {/* Basic Salary Input */}
                 <Card>
@@ -432,7 +428,7 @@ export default function EthiopianSalaryCalculator() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="space-y-6"
+                      className="space-y-6 motion-safe"
                     >
                 {/* Overtime Calculator */}
                 <OvertimeCalculator
@@ -475,7 +471,7 @@ export default function EthiopianSalaryCalculator() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="space-y-6"
+                      className="space-y-6 motion-safe"
                     >
                 {/* Union Dues */}
                 <Card>
@@ -546,7 +542,7 @@ export default function EthiopianSalaryCalculator() {
                   variants={tabTriggerVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="w-full"
+                  className="w-full motion-safe"
                 >
                   <TabsTrigger 
                     value="breakdown" 
@@ -560,7 +556,7 @@ export default function EthiopianSalaryCalculator() {
                   variants={tabTriggerVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="w-full"
+                  className="w-full motion-safe"
                 >
                   <TabsTrigger 
                     value="visualization" 
@@ -574,7 +570,7 @@ export default function EthiopianSalaryCalculator() {
                   variants={tabTriggerVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="w-full"
+                  className="w-full motion-safe"
                 >
                   <TabsTrigger 
                     value="whatif" 
@@ -588,7 +584,7 @@ export default function EthiopianSalaryCalculator() {
                   variants={tabTriggerVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="w-full"
+                  className="w-full motion-safe"
                 >
                   <TabsTrigger 
                     value="export" 
@@ -610,7 +606,7 @@ export default function EthiopianSalaryCalculator() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="space-y-6"
+                      className="space-y-6 motion-safe"
                     >
                 {/* Salary Breakdown Card */}
                 <SalaryBreakdownCard 
@@ -677,7 +673,7 @@ export default function EthiopianSalaryCalculator() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="space-y-6"
+                      className="space-y-6 motion-safe"
                     >
                 {/* Salary Visualization */}
                 <SalaryVisualization calculation={calculation} isAmharic={isAmharic} />
@@ -695,7 +691,7 @@ export default function EthiopianSalaryCalculator() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="space-y-6"
+                      className="space-y-6 motion-safe"
                     >
                 {/* What-If Calculator */}
                 <WhatIfCalculator baseInputs={inputs} baseCalculation={calculation} isAmharic={isAmharic} />
@@ -713,7 +709,7 @@ export default function EthiopianSalaryCalculator() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="space-y-6"
+                      className="space-y-6 motion-safe"
                     >
                 {/* Export & Share Options */}
                 <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
@@ -769,7 +765,7 @@ export default function EthiopianSalaryCalculator() {
         </section>
 
         {/* Calculator Benefits Section */}
-        <section className="calculator-benefits mt-8 rounded-lg overflow-hidden relative" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
+        <section className="calculator-benefits mt-8 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
           <DarkVeil 
             hueShift={120}
             noiseIntensity={0.015}
@@ -805,7 +801,7 @@ export default function EthiopianSalaryCalculator() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faq-section" className="faq-section mt-12 rounded-lg overflow-hidden relative" style={{ width: '100%', height: 'min(600px, 90vh)' }}>
+        <section id="faq-section" className="faq-section mt-12 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: 'min(600px, 90vh)' }}>
           <DarkVeil 
             hueShift={200}
             noiseIntensity={0.02}
@@ -885,7 +881,7 @@ export default function EthiopianSalaryCalculator() {
         </section>
 
         {/* Related Tools Section */}
-        <section className="related-tools mt-12 rounded-lg overflow-hidden relative" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
+        <section className="related-tools mt-12 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
           <DarkVeil 
             hueShift={280}
             noiseIntensity={0.018}

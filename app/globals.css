@@ -78,9 +78,32 @@
   * {
     border-color: hsl(var(--border));
   }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    overflow-x: hidden;
+  }
+  
+  /* Smooth scrolling for all elements */
+  * {
+    scroll-behavior: smooth;
+  }
+  
+  /* Performance optimizations */
+  .dark-veil-container {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  
+  /* Optimize animations */
+  .motion-safe {
+    will-change: transform, opacity;
   }
   
   /* Custom placeholder styling for more subtle appearance */
