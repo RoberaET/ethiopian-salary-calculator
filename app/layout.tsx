@@ -161,28 +161,6 @@ export default function RootLayout({
                 align-items: center;
                 justify-content: center;
               }
-              
-              /* Ensure proper focus indicators */
-              .focus\\:not-sr-only:focus {
-                position: static !important;
-                width: auto !important;
-                height: auto !important;
-                padding: 0.5rem 1rem !important;
-                margin: 0 !important;
-                overflow: visible !important;
-                clip: auto !important;
-                white-space: normal !important;
-              }
-              
-              /* Critical loading states */
-              .loading-spinner {
-                animation: spin 1s linear infinite;
-              }
-              
-              @keyframes spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-              }
             `
           }}
         />

@@ -209,8 +209,7 @@ const nextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'none'",
-              "upgrade-insecure-requests",
-              "require-trusted-types-for 'script'"
+              "upgrade-insecure-requests"
             ].join('; '),
           },
         ],
