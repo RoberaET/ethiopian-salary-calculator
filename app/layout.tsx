@@ -100,15 +100,31 @@ export default function RootLayout({
         <meta name="twitter:creator" content="@EthiopianSalaryCalc" />
         <meta name="twitter:site" content="@EthiopianSalaryCalc" />
         
-        {/* Font optimization - Let Next.js handle font loading */}
+        {/* Critical CSS and font optimization */}
         <style
           dangerouslySetInnerHTML={{
             __html: `
-              /* Fallback fonts for better performance */
-              body {
+              /* Critical CSS for above-the-fold content */
+              * {
+                box-sizing: border-box;
+              }
+              
+              html {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
                 font-size: 16px;
                 line-height: 1.6;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+              }
+              
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: inherit;
+                font-size: inherit;
+                line-height: inherit;
+                color: #000;
+                background-color: #fff;
               }
               
               /* Ensure minimum font size for accessibility */
@@ -116,21 +132,26 @@ export default function RootLayout({
                 font-size: inherit;
               }
               
-              /* Critical font loading optimization */
-              @font-face {
-                font-family: 'Geist Sans';
-                font-style: normal;
-                font-weight: 100 900;
-                font-display: swap;
-                src: local('Geist Sans'), local('GeistSans');
+              /* Critical loading states */
+              .loading-spinner {
+                animation: spin 1s linear infinite;
               }
               
-              @font-face {
-                font-family: 'Geist Mono';
-                font-style: normal;
-                font-weight: 100 900;
-                font-display: swap;
-                src: local('Geist Mono'), local('GeistMono');
+              @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+              }
+              
+              /* Focus indicators for accessibility */
+              .focus\\:not-sr-only:focus {
+                position: static !important;
+                width: auto !important;
+                height: auto !important;
+                padding: 0.5rem 1rem !important;
+                margin: 0 !important;
+                overflow: visible !important;
+                clip: auto !important;
+                white-space: normal !important;
               }
               
               /* Critical CSS for above-the-fold content */

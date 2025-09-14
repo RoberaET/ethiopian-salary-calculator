@@ -14,7 +14,7 @@ const nextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion', 'recharts'],
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion', 'recharts', 'date-fns'],
     turbo: {
       rules: {
         '*.svg': {
@@ -23,9 +23,30 @@ const nextConfig = {
         },
       },
     },
+    // Enable modern JavaScript features
+    esmExternals: 'loose',
+    // Optimize CSS
+    optimizeCss: false, // Disable to prevent build errors
+  },
+  // Compiler optimizations
+  compiler: {
+    // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
+    // Modern JavaScript optimizations
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Keep date-fns as is to avoid ESM issues
+    }
+    
+    // Enable modern JavaScript features
+    config.experiments = {
+      ...config.experiments,
+      topLevelAwait: true,
+    }
+    
     if (!dev && !isServer) {
       // Aggressive minification
       config.optimization.minimize = true
@@ -35,40 +56,75 @@ const nextConfig = {
       config.optimization.usedExports = true
       config.optimization.sideEffects = false
       
-      // Chunk splitting for better caching
+      // Modern JavaScript target
+      config.target = ['web', 'es2020']
+      
+      // Module concatenation for better performance
+      config.optimization.concatenateModules = true
+      
+      // Advanced chunk splitting for better tree shaking
       config.optimization.splitChunks = {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
         cacheGroups: {
+          // Core React libraries
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
+            chunks: 'all',
+            priority: 20,
+            enforce: true,
+          },
+          // UI libraries
+          ui: {
+            test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
+            name: 'ui',
+            chunks: 'all',
+            priority: 18,
+            enforce: true,
+          },
+          // Animation libraries
+          motion: {
+            test: /[\\/]node_modules[\\/](framer-motion|motion)[\\/]/,
+            name: 'motion',
+            chunks: 'all',
+            priority: 16,
+            enforce: true,
+          },
+          // Chart libraries
+          charts: {
+            test: /[\\/]node_modules[\\/](recharts|d3)[\\/]/,
+            name: 'charts',
+            chunks: 'all',
+            priority: 16,
+            enforce: true,
+          },
+          // Date utilities
+          date: {
+            test: /[\\/]node_modules[\\/]date-fns[\\/]/,
+            name: 'date',
+            chunks: 'all',
+            priority: 14,
+            enforce: true,
+          },
+          // Other vendor libraries
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
             chunks: 'all',
             priority: 10,
+            minChunks: 1,
+            reuseExistingChunk: true,
           },
+          // Common chunks
           common: {
             name: 'common',
             minChunks: 2,
             chunks: 'all',
             priority: 5,
             reuseExistingChunk: true,
-          },
-          ui: {
-            test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
-            name: 'ui',
-            chunks: 'all',
-            priority: 15,
-          },
-          charts: {
-            test: /[\\/]node_modules[\\/](recharts|d3)[\\/]/,
-            name: 'charts',
-            chunks: 'all',
-            priority: 15,
-          },
-          motion: {
-            test: /[\\/]node_modules[\\/](framer-motion|motion)[\\/]/,
-            name: 'motion',
-            chunks: 'all',
-            priority: 15,
+            enforce: true,
           },
         },
       }
