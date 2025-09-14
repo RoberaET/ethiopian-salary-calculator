@@ -95,7 +95,15 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ]
+  
+  // Amharic month names
+  const amharicMonthNames = [
+    "ጥር", "የካቲት", "መጋቢት", "ሚያዝያ", "ግንቦት", "ሰኔ",
+    "ሐምሌ", "ነሐሴ", "መስከረም", "ጥቅምት", "ኅዳር", "ታኅሣሥ"
+  ]
+  
   const currentMonth = monthNames[today.getMonth()]
+  const currentAmharicMonth = amharicMonthNames[today.getMonth()]
 
   return (
     <div className="space-y-6">
@@ -129,7 +137,7 @@ export function SalaryBreakdownCard({ calculation, inputs, isAmharic }: SalaryBr
           <Calendar className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm text-muted-foreground">
             {isAmharic 
-              ? `ዛሬ: ${currentMonth} ${currentDay}, 2018 - ${daysLeftForSalary} ቀናት የተቀረው`
+              ? `ዛሬ: ${currentAmharicMonth} ${currentDay}, 2018 - ${daysLeftForSalary} ቀናት የተቀረው`
               : `Today: ${currentMonth} ${currentDay}, 2018 - ${daysLeftForSalary} days left for salary`
             }
           </span>

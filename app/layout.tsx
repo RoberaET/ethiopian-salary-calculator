@@ -38,10 +38,10 @@ export const metadata: Metadata = {
     siteName: 'Ethiopian Salary Calculator',
     images: [
       {
-        url: '/images/calculator-preview.jpg',
+        url: '/images/ReactorTech.png',
         width: 1200,
         height: 630,
-        alt: 'Ethiopian Salary Calculator Interface',
+        alt: 'Ethiopian Salary Calculator Interface - Free Tax Calculator Tool',
       },
     ],
     locale: 'en_US',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Ethiopian Salary Calculator 2025 | Free Tax & Net Pay Tool',
     description: 'Calculate your Ethiopian salary with 2025 tax brackets. Free PAYE calculator for accurate net pay, pension & tax deductions.',
-    images: ['/images/calculator-preview.jpg'],
+    images: ['/images/ReactorTech.png'],
   },
   robots: {
     index: true,
@@ -91,16 +91,10 @@ export default function RootLayout({
         <meta name="theme-color" content="#667eea" />
         <meta name="msapplication-TileColor" content="#667eea" />
 
-        {/* Explicit OG/Twitter tags to refresh social previews */}
-        <meta property="og:title" content="Ethiopian Salary Calculator 2025 - Free Tax Calculator" />
-        <meta property="og:description" content="Free Ethiopian tax calculator with 2025 PAYE rates" />
-        <meta property="og:url" content="https://ethiopiansalarycalculator.vercel.app" />
-        <meta property="og:site_name" content="Ethiopian Salary Calculator" />
-        <meta property="og:type" content="website" />
+        {/* Additional meta tags for better SEO */}
         <meta property="og:updated_time" content={ogUpdatedTime} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Ethiopian Salary Calculator 2025" />
-        <meta name="twitter:description" content="Free Ethiopian tax calculator with 2025 PAYE rates" />
+        <meta name="twitter:creator" content="@EthiopianSalaryCalc" />
+        <meta name="twitter:site" content="@EthiopianSalaryCalc" />
         
         {/* Font preloading is handled by Next/font (GeistSans/GeistMono) */}
         
@@ -173,6 +167,37 @@ export default function RootLayout({
                     "@type": "Answer",
                     "text": "Pension contribution is calculated as 7% of your gross salary. This is a mandatory pension contribution required by Ethiopian labor law."
                   }
+                }
+              ]
+            })
+          }}
+        />
+        
+        {/* Breadcrumb Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://ethiopiansalarycalculator.vercel.app"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Ethiopian Salary Calculator",
+                  "item": "https://ethiopiansalarycalculator.vercel.app"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Tax Calculator 2025",
+                  "item": "https://ethiopiansalarycalculator.vercel.app"
                 }
               ]
             })
