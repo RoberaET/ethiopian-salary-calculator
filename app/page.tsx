@@ -263,7 +263,15 @@ export default function EthiopianSalaryCalculator() {
         <main id="main-content" className="container mx-auto px-4 py-8" role="main">
           <div id="calculator" className="grid gap-8 lg:grid-cols-2">
           {/* Input Section */}
-          <div className="space-y-6">
+          <div className="space-y-6 p-6 rounded-lg bg-card/50 border border-border/50">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-2">
+                {isAmharic ? "የደመወዝ መረጃዎች" : "Salary Information"}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {isAmharic ? "የእርስዎን ደመወዝ ዝርዝር ያስገቡ" : "Enter your salary details"}
+              </p>
+            </div>
             {/* Salary Negotiation Mode */}
             <Suspense fallback={<LoadingSpinner />}>
               <SalaryNegotiationMode
@@ -562,8 +570,19 @@ export default function EthiopianSalaryCalculator() {
             </Tabs>
           </div>
 
+          {/* Divider for mobile */}
+          <div className="lg:hidden border-t border-border my-8"></div>
+
           {/* Results Section */}
-          <div className="space-y-6">
+          <div className="space-y-6 p-6 rounded-lg bg-card/30 border border-border/30">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-2">
+                {isAmharic ? "የደመወዝ ውጤት" : "Salary Results"}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {isAmharic ? "የእርስዎን የተጣራ ደመወዝ ይመልከቱ" : "View your take-home pay breakdown"}
+              </p>
+            </div>
             {/* Results Tabs */}
             <Tabs value={activeResultsTab} onValueChange={setActiveResultsTab} className="w-full">
               <motion.div
