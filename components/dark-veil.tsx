@@ -99,9 +99,15 @@ export default function DarkVeil({
     const canvas = ref.current as HTMLCanvasElement;
     const parent = canvas.parentElement as HTMLElement;
 
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+    
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 1.5), // Reduced DPR for better performance
-      canvas
+      dpr: Math.min(window.devicePixelRatio, 1.2), // Further reduced DPR
+      canvas,
+      alpha: true,
+      antialias: false, // Disable antialiasing for better performance
     });
 
     const gl = renderer.gl;
@@ -143,10 +149,17 @@ export default function DarkVeil({
     const start = performance.now();
     let frame = 0;
     let lastTime = 0;
+    let isVisible = true;
+    
+    // Pause animation when tab is not visible
+    const handleVisibilityChange = () => {
+      isVisible = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const loop = (currentTime: number) => {
-      // Throttle to 30fps for better performance
-      if (currentTime - lastTime >= 33) {
+      // Only render if visible and throttle to 24fps for better performance
+      if (isVisible && currentTime - lastTime >= 42) {
         program.uniforms.uTime.value = ((currentTime - start) / 1000) * speed;
         program.uniforms.uHueShift.value = hueShift;
         program.uniforms.uNoise.value = noiseIntensity;
@@ -165,6 +178,7 @@ export default function DarkVeil({
       cancelAnimationFrame(frame);
       clearTimeout(resizeTimeout);
       window.removeEventListener('resize', throttledResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
   return <canvas ref={ref} className="w-full h-full block" />;

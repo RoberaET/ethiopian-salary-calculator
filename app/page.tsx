@@ -9,13 +9,14 @@
  * If you use this code, please provide proper attribution to the original author.
  */
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense, lazy } from "react"
+import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calculator, DollarSign, Settings, FileText, BarChart3, Zap, Share2 } from "lucide-react"
+import { Calculator, DollarSign, Settings, FileText, BarChart3, Zap, Share2, Loader2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { calculateSalary, TAX_BRACKETS, type SalaryInputs } from "@/lib/salary-calculator"
@@ -24,14 +25,32 @@ import { Calendar as UiCalendar } from "@/components/ui/calendar"
 import { endOfMonth, differenceInCalendarDays } from "date-fns"
 import { OvertimeCalculator } from "@/components/overtime-calculator"
 import { SalaryBreakdownCard } from "@/components/salary-breakdown-card"
-import { SalaryVisualization } from "@/components/salary-visualization"
-import DarkVeil from "@/components/dark-veil"
-import { SalaryNegotiationMode } from "@/components/salary-negotiation-mode"
-import { CurrencyConverter } from "@/components/currency-converter"
-import { WhatIfCalculator } from "@/components/what-if-calculator"
-import { ExportShareOptions } from "@/components/export-share-options"
 import { sendInvoiceEmail } from "@/lib/email-client"
 import { PercentageInput } from "@/components/percentage-input"
+
+// Lazy load heavy components
+const SalaryVisualization = lazy(() => import("@/components/salary-visualization").then(module => ({ default: module.SalaryVisualization })))
+const DarkVeil = lazy(() => import("@/components/dark-veil"))
+const SalaryNegotiationMode = lazy(() => import("@/components/salary-negotiation-mode").then(module => ({ default: module.SalaryNegotiationMode })))
+const CurrencyConverter = lazy(() => import("@/components/currency-converter").then(module => ({ default: module.CurrencyConverter })))
+const WhatIfCalculator = lazy(() => import("@/components/what-if-calculator").then(module => ({ default: module.WhatIfCalculator })))
+const ExportShareOptions = lazy(() => import("@/components/export-share-options").then(module => ({ default: module.ExportShareOptions })))
+
+// Loading components for better UX
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center p-8">
+    <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+  </div>
+)
+
+const ChartLoading = () => (
+  <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 rounded-lg">
+    <div className="text-center">
+      <Loader2 className="h-8 w-8 animate-spin text-orange-500 mx-auto mb-2" />
+      <p className="text-sm text-gray-600 dark:text-gray-400">Loading charts...</p>
+    </div>
+  </div>
+)
 
 export default function EthiopianSalaryCalculator() {
   const [inputs, setInputs] = useState<SalaryInputs>({
@@ -160,23 +179,25 @@ export default function EthiopianSalaryCalculator() {
         <div className="container mx-auto px-4 py-3 sm:py-6">
           <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-center gap-3 min-w-0">
-              <img
+              <Image
                 src="/images/ReactorTech.png"
                 alt={isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር ሎጎ" : "Ethiopian Salary Calculator Logo - Free Tax Calculator Tool"}
                 width={48}
                 height={48}
                 className="h-8 w-8 sm:h-12 sm:w-12 rounded-lg object-contain"
-                loading="eager"
-                decoding="async"
+                priority
+                sizes="(max-width: 640px) 32px, 48px"
+                quality={85}
               />
-              <img
+              <Image
                 src="/images/et.svg"
                 alt={isAmharic ? "የኢትዮጵያ ባንዲራ - የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Ethiopian Flag - Ethiopian Salary Calculator 2025"}
                 width={44}
                 height={44}
                 className="h-8 w-8 sm:h-11 sm:w-11 rounded-sm"
                 loading="lazy"
-                decoding="async"
+                sizes="(max-width: 640px) 32px, 44px"
+                quality={85}
               />
               <div className="min-w-0">
                 <h1 className="text-base sm:text-2xl font-bold text-foreground leading-tight break-words">
@@ -210,15 +231,17 @@ export default function EthiopianSalaryCalculator() {
         </a>
         {/* Dark Veil Background Section */}
         <section className="mb-8 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: '600px' }}>
-          <DarkVeil 
-            hueShift={45}
-            noiseIntensity={0.02}
-            scanlineIntensity={0.1}
-            speed={0.3}
-            scanlineFrequency={2.0}
-            warpAmount={0.1}
-            resolutionScale={1}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 animate-pulse" />}>
+            <DarkVeil 
+              hueShift={45}
+              noiseIntensity={0.02}
+              scanlineIntensity={0.1}
+              speed={0.3}
+              scanlineFrequency={2.0}
+              warpAmount={0.1}
+              resolutionScale={1}
+            />
+          </Suspense>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center text-white px-8 max-w-4xl">
               <h2 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
@@ -244,11 +267,13 @@ export default function EthiopianSalaryCalculator() {
           {/* Input Section */}
           <div className="space-y-6">
             {/* Salary Negotiation Mode */}
-            <SalaryNegotiationMode
-              inputs={inputs}
-              onGrossSalaryChange={(grossSalary) => updateInput("grossSalary", grossSalary)}
-              isAmharic={isAmharic}
-            />
+            <Suspense fallback={<LoadingSpinner />}>
+              <SalaryNegotiationMode
+                inputs={inputs}
+                onGrossSalaryChange={(grossSalary) => updateInput("grossSalary", grossSalary)}
+                isAmharic={isAmharic}
+              />
+            </Suspense>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <motion.div
@@ -617,7 +642,9 @@ export default function EthiopianSalaryCalculator() {
                 />
 
                 {/* Currency Converter */}
-                <CurrencyConverter netSalary={calculation.netSalary} isAmharic={isAmharic} />
+                <Suspense fallback={<LoadingSpinner />}>
+                  <CurrencyConverter netSalary={calculation.netSalary} isAmharic={isAmharic} />
+                </Suspense>
 
                 {/* Tax Information */}
                 <Card>
@@ -676,7 +703,9 @@ export default function EthiopianSalaryCalculator() {
                       className="space-y-6 motion-safe"
                     >
                 {/* Salary Visualization */}
-                <SalaryVisualization calculation={calculation} isAmharic={isAmharic} />
+                <Suspense fallback={<ChartLoading />}>
+                  <SalaryVisualization calculation={calculation} isAmharic={isAmharic} />
+                </Suspense>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -694,7 +723,9 @@ export default function EthiopianSalaryCalculator() {
                       className="space-y-6 motion-safe"
                     >
                 {/* What-If Calculator */}
-                <WhatIfCalculator baseInputs={inputs} baseCalculation={calculation} isAmharic={isAmharic} />
+                <Suspense fallback={<LoadingSpinner />}>
+                  <WhatIfCalculator baseInputs={inputs} baseCalculation={calculation} isAmharic={isAmharic} />
+                </Suspense>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -712,7 +743,9 @@ export default function EthiopianSalaryCalculator() {
                       className="space-y-6 motion-safe"
                     >
                 {/* Export & Share Options */}
-                <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
+                <Suspense fallback={<LoadingSpinner />}>
+                  <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
+                </Suspense>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -766,15 +799,17 @@ export default function EthiopianSalaryCalculator() {
 
         {/* Calculator Benefits Section */}
         <section className="calculator-benefits mt-8 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
-          <DarkVeil 
-            hueShift={120}
-            noiseIntensity={0.015}
-            scanlineIntensity={0.08}
-            speed={0.25}
-            scanlineFrequency={1.8}
-            warpAmount={0.08}
-            resolutionScale={1}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-800 animate-pulse" />}>
+            <DarkVeil 
+              hueShift={120}
+              noiseIntensity={0.015}
+              scanlineIntensity={0.08}
+              speed={0.25}
+              scanlineFrequency={1.8}
+              warpAmount={0.08}
+              resolutionScale={1}
+            />
+          </Suspense>
           <div className="absolute inset-0 p-6 flex flex-col justify-center">
             <h2 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
               {isAmharic ? "የእኛን የኢትዮጵያ ደመወዝ ካልኩሌተር ለምን እንጠቀም?" : "Why Use Our Ethiopian Salary Calculator?"}
@@ -802,15 +837,17 @@ export default function EthiopianSalaryCalculator() {
 
         {/* FAQ Section */}
         <section id="faq-section" className="faq-section mt-12 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: 'min(600px, 90vh)' }}>
-          <DarkVeil 
-            hueShift={200}
-            noiseIntensity={0.02}
-            scanlineIntensity={0.1}
-            speed={0.3}
-            scanlineFrequency={2.0}
-            warpAmount={0.1}
-            resolutionScale={1}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-indigo-900 to-cyan-800 animate-pulse" />}>
+            <DarkVeil 
+              hueShift={200}
+              noiseIntensity={0.02}
+              scanlineIntensity={0.1}
+              speed={0.3}
+              scanlineFrequency={2.0}
+              warpAmount={0.1}
+              resolutionScale={1}
+            />
+          </Suspense>
           <div className="absolute inset-0 p-6 overflow-y-auto">
             <h2 className="text-2xl font-bold text-white mb-6 drop-shadow-lg">
               {isAmharic ? "ተደጋግሞ የሚጠየቁ ጥያቄዎች - የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Frequently Asked Questions - Ethiopian Salary Calculator"}
@@ -882,15 +919,17 @@ export default function EthiopianSalaryCalculator() {
 
         {/* Related Tools Section */}
         <section className="related-tools mt-12 rounded-lg overflow-hidden relative dark-veil-container" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
-          <DarkVeil 
-            hueShift={280}
-            noiseIntensity={0.018}
-            scanlineIntensity={0.09}
-            speed={0.28}
-            scanlineFrequency={1.9}
-            warpAmount={0.09}
-            resolutionScale={1}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-purple-900 to-pink-800 animate-pulse" />}>
+            <DarkVeil 
+              hueShift={280}
+              noiseIntensity={0.018}
+              scanlineIntensity={0.09}
+              speed={0.28}
+              scanlineFrequency={1.9}
+              warpAmount={0.09}
+              resolutionScale={1}
+            />
+          </Suspense>
           <div className="absolute inset-0 p-6 flex flex-col justify-center">
             <h2 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
               {isAmharic ? "ተዛማጅ የኢትዮጵያ የገንዘብ መሳሪያዎች" : "Related Ethiopian Financial Tools"}

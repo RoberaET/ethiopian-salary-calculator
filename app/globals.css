@@ -99,11 +99,39 @@
   .dark-veil-container {
     will-change: transform;
     transform: translateZ(0);
+    contain: layout style paint;
   }
   
   /* Optimize animations */
   .motion-safe {
     will-change: transform, opacity;
+  }
+  
+  /* Critical CSS for above-the-fold content */
+  .hero-section {
+    contain: layout style paint;
+    content-visibility: auto;
+  }
+  
+  /* Optimize images */
+  img {
+    content-visibility: auto;
+  }
+  
+  /* Reduce paint complexity */
+  .card {
+    contain: layout style;
+  }
+  
+  /* Optimize scrolling */
+  .scroll-container {
+    contain: strict;
+    overflow: auto;
+  }
+  
+  /* Reduce layout thrashing */
+  .stable-layout {
+    contain: layout;
   }
   
   /* Custom placeholder styling for more subtle appearance */

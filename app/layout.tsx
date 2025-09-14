@@ -96,7 +96,41 @@ export default function RootLayout({
         <meta name="twitter:creator" content="@EthiopianSalaryCalc" />
         <meta name="twitter:site" content="@EthiopianSalaryCalc" />
         
-        {/* Font preloading is handled by Next/font (GeistSans/GeistMono) */}
+        {/* Font preloading and optimization */}
+        <link
+          rel="preload"
+          href="/_next/static/media/geist-sans.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/_next/static/media/geist-mono.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              @font-face {
+                font-family: 'Geist Sans';
+                font-style: normal;
+                font-weight: 100 900;
+                font-display: swap;
+                src: url('/_next/static/media/geist-sans.woff2') format('woff2');
+              }
+              @font-face {
+                font-family: 'Geist Mono';
+                font-style: normal;
+                font-weight: 100 900;
+                font-display: swap;
+                src: url('/_next/static/media/geist-mono.woff2') format('woff2');
+              }
+            `
+          }}
+        />
         
         {/* Structured Data - WebApplication */}
         <script
@@ -204,18 +238,21 @@ export default function RootLayout({
           }}
         />
         
-        {/* Google Analytics 4 */}
+        {/* Google Analytics 4 - Deferred Loading */}
         <script
-          async
+          defer
           src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
         />
         <script
+          defer
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'GA_MEASUREMENT_ID');
+              gtag('config', 'GA_MEASUREMENT_ID', {
+                send_page_view: false
+              });
             `
           }}
         />
