@@ -12,21 +12,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Performance optimizations
+  // Minimal experimental features to prevent chunk loading issues
   experimental: {
-    // Temporarily disable experimental features to fix chunk loading
-    // optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion', 'recharts', 'date-fns'],
-    // turbo: {
-    //   rules: {
-    //     '*.svg': {
-    //       loaders: ['@svgr/webpack'],
-    //       as: '*.js',
-    //     },
-    //   },
-    // },
-    // Enable modern JavaScript features
-    esmExternals: 'loose',
-    // Optimize CSS
+    // Disable all experimental features that might cause chunk loading issues
+    esmExternals: false, // Disable to prevent ESM issues
     optimizeCss: false, // Disable to prevent build errors
   },
   // Compiler optimizations
@@ -34,10 +23,23 @@ const nextConfig = {
     // Remove console.log in production
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // Temporarily disable webpack config to fix CSS loading
-  // webpack: (config, { dev, isServer }) => {
-  //   return config
-  // },
+  // Targeted webpack config to fix chunk loading while preserving CSS
+  webpack: (config, { dev, isServer }) => {
+    // Fix chunk loading issues
+    if (dev) {
+      // Disable problematic caching in development
+      config.cache = false
+      
+      // Ensure proper chunk loading
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: false, // Disable chunk splitting in dev to prevent loading issues
+      }
+    }
+    
+    // Preserve CSS processing
+    return config
+  },
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],
