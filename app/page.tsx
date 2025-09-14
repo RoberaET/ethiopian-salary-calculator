@@ -59,12 +59,7 @@ export default function EthiopianSalaryCalculator() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [activeTab, setActiveTab] = useState("basic")
   const [activeResultsTab, setActiveResultsTab] = useState("breakdown")
-  const [mounted, setMounted] = useState(false)
-
-  // Ensure component is mounted on client side to prevent hydration issues
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // Removed mounting check to fix loading issue
   const today = new Date()
   const salaryDay = endOfMonth(today)
   const daysLeftForSalary = Math.max(0, differenceInCalendarDays(salaryDay, today))
@@ -145,21 +140,7 @@ export default function EthiopianSalaryCalculator() {
     }
   }
 
-  // Show loading state during hydration
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Loading calculator...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // Removed loading state check to fix infinite loading issue
 
   return (
     <div className="min-h-screen bg-background">
