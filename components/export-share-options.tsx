@@ -39,9 +39,9 @@ ${isAmharic ? "ጠቅላላ አበሎች" : "Total Allowances"}: ${formatCurrenc
 ${inputs.overtimePay > 0 ? `${isAmharic ? "ተጨማሪ ሰዓት" : "Overtime Pay"}: ${formatCurrency(inputs.overtimePay)}` : ""}
 
 ${isAmharic ? "ቅናሾች" : "DEDUCTIONS"}:
-${isAmharic ? "የገቢ ታክስ" : "Income Tax"}: ${formatCurrency(calculation.incomeTax)}
-${isAmharic ? "የጡረታ አበል" : "Pension (7%)"}: ${formatCurrency(calculation.pensionContribution)}
-${inputs.unionDues > 0 ? `${isAmharic ? "የሰራተኛ ማህበር" : "Union Dues"}: ${formatCurrency(inputs.unionDues)}` : ""}
+${isAmharic ? "የገቢ ታክስ" : "Income Tax (PAYE)"}: ${formatCurrency(calculation.incomeTax)}
+${isAmharic ? "የጡረታ አበል" : "Pension Contribution (7%)"}: ${formatCurrency(calculation.pensionContribution)}
+${inputs.unionDues > 0 ? `${isAmharic ? "የሰራተኛ ማህበር ቅናሽ" : "Union Dues"}: ${formatCurrency(inputs.unionDues)}` : ""}
 
 ${isAmharic ? "የተጣራ ደመወዝ" : "NET SALARY"}: ${formatCurrency(calculation.netSalary)}
 
@@ -149,11 +149,11 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
     const loansTotal = inputs.loanDeductions.reduce((s, l) => s + l.amount, 0)
     const otherDedTotal = inputs.otherDeductions.reduce((s, d) => s + d.amount, 0)
     const deductions: Array<{ label: string; amount: number }> = []
-    deductions.push({ label: isAmharic ? "የጡረታ አበል" : "Provident Fund", amount: calculation.pensionContribution })
-    if (inputs.unionDues > 0) deductions.push({ label: isAmharic ? "የሰራተኛ ማህበር" : "E.S.I.", amount: inputs.unionDues })
-    if (loansTotal > 0) deductions.push({ label: isAmharic ? "ብድር" : "Loan", amount: loansTotal })
+    deductions.push({ label: isAmharic ? "የጡረታ አበል" : "Pension Contribution (7%)", amount: calculation.pensionContribution })
+    if (inputs.unionDues > 0) deductions.push({ label: isAmharic ? "የሰራተኛ ማህበር ቅናሽ" : "Union Dues", amount: inputs.unionDues })
+    if (loansTotal > 0) deductions.push({ label: isAmharic ? "ብድር ቅናሽ" : "Loan Deduction", amount: loansTotal })
     if (otherDedTotal > 0) deductions.push({ label: isAmharic ? "ሌሎች ቅናሾች" : "Other Deductions", amount: otherDedTotal })
-    deductions.push({ label: isAmharic ? "የገቢ ታክስ" : "TSD/IT", amount: calculation.incomeTax })
+    deductions.push({ label: isAmharic ? "የገቢ ታክስ" : "Income Tax (PAYE)", amount: calculation.incomeTax })
 
     const earningsTotal = earnings.reduce((s, e) => s + e.amount, 0)
     const deductionsTotal = deductions.reduce((s, d) => s + d.amount, 0)
