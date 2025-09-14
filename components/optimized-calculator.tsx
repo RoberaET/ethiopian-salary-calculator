@@ -310,4 +310,4 @@ const ResultsSection = memo(function ResultsSection({
   )
 })
 
-export { InputSection, ResultsSection, LoadingSpinner, ChartLoading }
+export { InputSection, ResultsSection, LoadingSpinner, ChartLoading, CurrencyConverter }

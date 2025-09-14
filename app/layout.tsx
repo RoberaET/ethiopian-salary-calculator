@@ -83,8 +83,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Critical Meta Tags */}
+        <title>Ethiopian Salary Calculator 2025 | Free Tax & Net Pay Tool</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+        <meta name="description" content="Calculate your Ethiopian salary with 2025 tax brackets. Free PAYE calculator for accurate net pay, pension & tax deductions. Try now!" />
+        
         {/* Additional SEO Meta Tags */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="geo.region" content="ET" />
         <meta name="geo.placename" content="Ethiopia" />
         <meta name="ICBM" content="9.1450, 40.4897" />
@@ -96,37 +100,67 @@ export default function RootLayout({
         <meta name="twitter:creator" content="@EthiopianSalaryCalc" />
         <meta name="twitter:site" content="@EthiopianSalaryCalc" />
         
-        {/* Font preloading and optimization */}
-        <link
-          rel="preload"
-          href="/_next/static/media/geist-sans.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/_next/static/media/geist-mono.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+        {/* Font optimization - Let Next.js handle font loading */}
         <style
           dangerouslySetInnerHTML={{
             __html: `
+              /* Fallback fonts for better performance */
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+                font-size: 16px;
+                line-height: 1.6;
+              }
+              
+              /* Ensure minimum font size for accessibility */
+              * {
+                font-size: inherit;
+              }
+              
+              /* Critical font loading optimization */
               @font-face {
                 font-family: 'Geist Sans';
                 font-style: normal;
                 font-weight: 100 900;
                 font-display: swap;
-                src: url('/_next/static/media/geist-sans.woff2') format('woff2');
+                src: local('Geist Sans'), local('GeistSans');
               }
+              
               @font-face {
                 font-family: 'Geist Mono';
                 font-style: normal;
                 font-weight: 100 900;
                 font-display: swap;
-                src: url('/_next/static/media/geist-mono.woff2') format('woff2');
+                src: local('Geist Mono'), local('GeistMono');
+              }
+              
+              /* Critical CSS for above-the-fold content */
+              .hero-section {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              
+              /* Ensure proper focus indicators */
+              .focus\\:not-sr-only:focus {
+                position: static !important;
+                width: auto !important;
+                height: auto !important;
+                padding: 0.5rem 1rem !important;
+                margin: 0 !important;
+                overflow: visible !important;
+                clip: auto !important;
+                white-space: normal !important;
+              }
+              
+              /* Critical loading states */
+              .loading-spinner {
+                animation: spin 1s linear infinite;
+              }
+              
+              @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
               }
             `
           }}

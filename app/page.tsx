@@ -27,7 +27,7 @@ import { OvertimeCalculator } from "@/components/overtime-calculator"
 import { SalaryBreakdownCard } from "@/components/salary-breakdown-card"
 import { sendInvoiceEmail } from "@/lib/email-client"
 import { PercentageInput } from "@/components/percentage-input"
-import { InputSection, ResultsSection, LoadingSpinner, ChartLoading } from "@/components/optimized-calculator"
+import { InputSection, ResultsSection, LoadingSpinner, ChartLoading, CurrencyConverter } from "@/components/optimized-calculator"
 
 // Lazy load heavy components
 const DarkVeil = lazy(() => import("@/components/dark-veil"))
@@ -163,8 +163,16 @@ export default function EthiopianSalaryCalculator() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Skip to main content for accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50"
+      >
+        {isAmharic ? "ወደ ዋና ይዘት ይሂዱ" : "Skip to main content"}
+      </a>
+      
       {/* Header */}
-      <header className="border-b bg-card">
+      <header className="border-b bg-card" role="banner">
         <div className="container mx-auto px-4 py-3 sm:py-6">
           <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-center gap-3 min-w-0">
@@ -252,7 +260,8 @@ export default function EthiopianSalaryCalculator() {
           </div>
         </section>
 
-        <div id="calculator" className="grid gap-8 lg:grid-cols-2">
+        <main id="main-content" className="container mx-auto px-4 py-8" role="main">
+          <div id="calculator" className="grid gap-8 lg:grid-cols-2">
           {/* Input Section */}
           <div className="space-y-6">
             {/* Salary Negotiation Mode */}
@@ -753,6 +762,7 @@ export default function EthiopianSalaryCalculator() {
             </Tabs>
           </div>
         </div>
+        </main>
 
         {/* SEO Content Section - After Calculator */}
         <section className="tax-info mt-12 p-6 rounded-lg border bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-zinc-900 dark:to-zinc-800 border-orange-200 dark:border-border">

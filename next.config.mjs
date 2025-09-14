@@ -87,6 +87,8 @@ const nextConfig = {
   },
   // Compression
   compress: true,
+  // Production source maps
+  productionBrowserSourceMaps: true,
   // Bundle analyzer (uncomment for analysis)
   // webpack: (config, { isServer }) => {
   //   if (!isServer) {
@@ -97,12 +99,13 @@ const nextConfig = {
   //   }
   //   return config;
   // },
-  // Headers for better caching
+  // Headers for security and caching
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
+          // Security Headers
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
@@ -114,6 +117,45 @@ const nextConfig = {
           {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+          },
+          // Content Security Policy
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com data:",
+              "img-src 'self' data: blob: https:",
+              "connect-src 'self' https://www.google-analytics.com https://vitals.vercel-insights.com",
+              "frame-src 'none'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests",
+              "require-trusted-types-for 'script'"
+            ].join('; '),
           },
         ],
       },
