@@ -207,7 +207,6 @@ export default function EthiopianSalaryCalculator() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
         {/* Skip Navigation for Accessibility */}
         <a 
           href="#calculator" 
@@ -485,7 +484,6 @@ export default function EthiopianSalaryCalculator() {
             </Tabs>
           </div>
         </div>
-        </main>
 
         {/* SEO Content Section - After Calculator */}
         <section className="tax-info mt-12 p-6 rounded-lg border bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-zinc-900 dark:to-zinc-800 border-orange-200 dark:border-border">
