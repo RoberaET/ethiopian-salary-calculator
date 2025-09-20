@@ -27,7 +27,7 @@ import { OvertimeCalculator } from "@/components/overtime-calculator"
 import { SalaryBreakdownCard } from "@/components/salary-breakdown-card"
 import { sendInvoiceEmail } from "@/lib/email-client"
 import { PercentageInput } from "@/components/percentage-input"
-import { ResultsSection, LoadingSpinner, ChartLoading, CurrencyConverter } from "@/components/optimized-calculator"
+import { ResultsSection, LoadingSpinner, ChartLoading, CurrencyConverter, InputSection } from "@/components/optimized-calculator"
 
 // Lazy load heavy components
 const DarkVeil = lazy(() => import("@/components/dark-veil"))
@@ -250,49 +250,16 @@ export default function EthiopianSalaryCalculator() {
 
         <main id="main-content" className="container mx-auto px-4 py-8" role="main">
           <div id="calculator" className="grid gap-8 lg:grid-cols-2">
-          {/* Input Section */}
-          <div className="space-y-6 p-6 rounded-lg bg-card/50 border border-border/50">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">
-                {isAmharic ? "የደመወዝ መረጃዎች" : "Salary Information"}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {isAmharic ? "የእርስዎን ደመወዝ ዝርዝር ያስገቡ" : "Enter your salary details"}
-              </p>
-            </div>
-            {/* Basic Salary Input */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-primary" />
-                  {isAmharic ? "መሰረታዊ ደመወዝ" : "Basic Salary"}
-                </CardTitle>
-                <CardDescription>
-                  {isAmharic ? "የወር ደመወዝዎን ያስገቡ" : "Enter your monthly gross salary"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="gross-salary" className="mb-2">
-                    {isAmharic ? "ጠቅላላ ወራዊ ደመወዝ (ብር)" : "Gross Monthly Salary (ETB)"}
-                  </Label>
-                  <Input
-                    id="gross-salary"
-                    type="number"
-                    value={inputs.grossSalary || ""}
-                    onChange={(e) => handleNumberInput("grossSalary", e.target.value)}
-                    className={`text-lg font-semibold ${errors.grossSalary ? "border-destructive" : ""}`}
-                    placeholder={isAmharic ? "ደመወዝዎን ያስገቡ" : "Enter your salary"}
-                    min="0"
-                    aria-label={isAmharic ? "ጠቅላላ ወራዊ ደመወዝ በኢትዮጵያ ብር" : "Enter your gross salary in Ethiopian Birr"}
-                    aria-describedby="gross-salary-help"
-                  />
-                  {errors.grossSalary && <p className="text-sm text-destructive mt-1">{errors.grossSalary}</p>}
-                </div>
-              </CardContent>
-            </Card>
-
-          </div>
+              {/* Input Section */}
+              <InputSection
+                inputs={inputs}
+                errors={errors}
+                updateInput={updateInput}
+                isAmharic={isAmharic}
+                date={date}
+                setDate={setDate}
+                daysLeftForSalary={daysLeftForSalary}
+              />
 
           {/* Divider for mobile */}
           <div className="lg:hidden border-t border-border my-8"></div>
