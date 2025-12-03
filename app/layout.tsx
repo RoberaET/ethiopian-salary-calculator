@@ -16,12 +16,13 @@ import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Ethiopian Salary Calculator 2025 | Free Tax & Net Pay Tool',
-  description: 'Calculate your Ethiopian salary with 2025 tax brackets. Free PAYE calculator for accurate net pay, pension & tax deductions. Try now!',
+  title: 'Ethiopian Salary Calculator 2025 - Free Tax & Net Pay',
+  description: 'Free Ethiopian salary calculator 2025. Calculate your net pay, income tax (PAYE), and pension contributions with current Ethiopian tax brackets.',
   keywords: 'Ethiopian salary calculator, Ethiopia tax calculator, Ethiopian income tax calculator, PAYE Ethiopia, net salary Ethiopia, tax brackets Ethiopia 2025, Addis Ababa salary calculator, Ethiopian payroll calculator, HR tools Ethiopia, salary calculator Addis Ababa',
   authors: [{ name: 'Ethiopian Salary Calculator' }],
   creator: 'Ethiopian Salary Calculator',
   publisher: 'Ethiopian Salary Calculator',
+  applicationName: 'Ethiopian Salary Calculator',
   formatDetection: {
     email: false,
     address: false,
@@ -32,8 +33,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'Ethiopian Salary Calculator 2025 | Free Tax & Net Pay Tool',
-    description: 'Calculate your Ethiopian salary with 2025 tax brackets. Free PAYE calculator for accurate net pay, pension & tax deductions.',
+    title: 'Ethiopian Salary Calculator 2025 - Free Tax & Net Pay',
+    description: 'Free Ethiopian salary calculator 2025. Calculate your net pay, income tax (PAYE), and pension contributions with current Ethiopian tax brackets.',
     url: 'https://ethiopiansalarycalculator.vercel.app',
     siteName: 'Ethiopian Salary Calculator',
     images: [
@@ -49,8 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ethiopian Salary Calculator 2025 | Free Tax & Net Pay Tool',
-    description: 'Calculate your Ethiopian salary with 2025 tax brackets. Free PAYE calculator for accurate net pay, pension & tax deductions.',
+    title: 'Ethiopian Salary Calculator 2025 - Free Tax & Net Pay',
+    description: 'Free Ethiopian salary calculator 2025. Calculate your net pay, income tax (PAYE), and pension contributions with current Ethiopian tax brackets.',
     images: ['/images/ReactorTech.png'],
   },
   robots: {
@@ -68,9 +69,13 @@ export const metadata: Metadata = {
     google: 'your-google-verification-code',
   },
   icons: {
-    icon: '/images/ReactorTech.png',
-    shortcut: '/images/ReactorTech.png',
-    apple: '/images/ReactorTech.png',
+    icon: [
+      { url: '/icon', sizes: '32x32', type: 'image/png' },
+      { url: '/icon', sizes: '192x192', type: 'image/png' },
+      { url: '/icon', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/icon',
+    apple: '/apple-icon',
   },
 }
 
@@ -84,9 +89,17 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* Critical Meta Tags */}
-        <title>Ethiopian Salary Calculator 2025 | Free Tax & Net Pay Tool</title>
+        <title>Ethiopian Salary Calculator 2025 - Free Tax & Net Pay</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-        <meta name="description" content="Calculate your Ethiopian salary with 2025 tax brackets. Free PAYE calculator for accurate net pay, pension & tax deductions. Try now!" />
+        <meta name="description" content="Free Ethiopian salary calculator 2025. Calculate your net pay, income tax (PAYE), and pension contributions with current Ethiopian tax brackets." />
+        <link rel="canonical" href="https://ethiopiansalarycalculator.vercel.app" />
+        <meta name="application-name" content="Ethiopian Salary Calculator" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="icon" href="/icon" sizes="32x32" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-icon" sizes="180x180" />
+        <meta property="og:site_name" content="Ethiopian Salary Calculator" />
+        <meta property="og:title" content="Ethiopian Salary Calculator 2025 - Free Tax & Net Pay" />
+        <meta property="og:description" content="Calculate your Ethiopian net salary, income tax, and pension using current tax brackets." />
         
         {/* Additional SEO Meta Tags */}
         <meta name="geo.region" content="ET" />
@@ -180,6 +193,35 @@ export default function RootLayout({
           }}
         />
         
+        {/* Structured Data - Organization and WebSite to influence sitelinks and name */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Ethiopian Salary Calculator",
+              "url": "https://ethiopiansalarycalculator.vercel.app",
+              "logo": "https://ethiopiansalarycalculator.vercel.app/icon"
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Ethiopian Salary Calculator",
+              "url": "https://ethiopiansalarycalculator.vercel.app",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://ethiopiansalarycalculator.vercel.app/?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
         {/* Structured Data - WebApplication */}
         <script
           type="application/ld+json"
