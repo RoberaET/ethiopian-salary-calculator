@@ -1,0 +1,704 @@
+"use client"
+
+/**
+ * Ethiopian Salary Calculator 2025
+ * Original Author: ROBERA MEKONNEN
+ * Year: 2026
+ * 
+ * This calculator helps users calculate their Ethiopian salary with 2026 tax brackets.
+ * If you use this code, please provide proper attribution to the original author.
+ */
+
+import { useState, useEffect, Suspense, lazy, useMemo, useCallback } from "react"
+import Image from "next/image"
+import dynamic from "next/dynamic"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Calculator, DollarSign, Settings, FileText, BarChart3, Zap, Share2, Loader2 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { calculateSalary, TAX_BRACKETS, type SalaryInputs } from "@/lib/salary-calculator"
+import { DynamicInputSection } from "@/components/dynamic-input-section"
+import { Calendar as UiCalendar } from "@/components/ui/calendar"
+import { endOfMonth, differenceInCalendarDays } from "date-fns"
+import { OvertimeCalculator } from "@/components/overtime-calculator"
+import { SalaryBreakdownCard } from "@/components/salary-breakdown-card"
+import { sendInvoiceEmail } from "@/lib/email-client"
+import { PercentageInput } from "@/components/percentage-input"
+import { ResultsSection, LoadingSpinner, ChartLoading, CurrencyConverter, InputSection } from "@/components/optimized-calculator"
+import ClientOnly from "@/components/ClientOnly"
+
+// Lazy load heavy components
+const FloatingLines = dynamic(() => import("@/components/FloatingLines"), { ssr: false })
+const ColorBends = dynamic(() => import("@/components/ColorBends"), { ssr: false })
+
+const SalaryVisualization = lazy(() =>
+  import("@/components/salary-visualization").then(module => ({ default: module.SalaryVisualization }))
+)
+const WhatIfCalculator = lazy(() =>
+  import("@/components/what-if-calculator").then(module => ({ default: module.WhatIfCalculator }))
+)
+const ExportShareOptions = lazy(() =>
+  import("@/components/export-share-options").then(module => ({ default: module.ExportShareOptions }))
+)
+
+// Main component state and logic
+
+export default function EthiopianSalaryCalculator() {
+  const [inputs, setInputs] = useState<SalaryInputs>({
+    grossSalary: 0,
+    transportAllowance: 0,
+    transportTaxable: false,
+    transportPercentage: 0,
+    housingAllowance: 0,
+    housingTaxable: false,
+    housingPercentage: 0,
+    medicalAllowance: 0,
+    medicalTaxable: false,
+    medicalPercentage: 0,
+    otherAllowances: [],
+    overtimePay: 0,
+    unionDues: 0,
+    loanDeductions: [],
+    otherDeductions: [],
+  })
+
+  const [isAmharic, setIsAmharic] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 8, 2))
+  const [activeTab, setActiveTab] = useState("basic")
+  const [activeResultsTab, setActiveResultsTab] = useState("breakdown")
+  // Removed mounting check to fix loading issue
+  const today = new Date(2026, 8, 2)
+  const salaryDay = endOfMonth(today)
+  const daysLeftForSalary = Math.max(0, differenceInCalendarDays(salaryDay, today))
+
+  // Memoize expensive calculation to prevent unnecessary re-computations
+  const calculation = useMemo(() => calculateSalary(inputs), [inputs])
+
+  // Optimized animation variants for better performance
+  const tabVariants = {
+    hidden: {
+      opacity: 0,
+      y: 10
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.2,
+        ease: "easeOut"
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -10,
+      transition: {
+        duration: 0.15,
+        ease: "easeIn"
+      }
+    }
+  }
+
+  // Simplified tab trigger variants for better performance
+  const tabTriggerVariants = {
+    hover: {
+      scale: 1.01,
+      transition: { duration: 0.15, ease: "easeOut" }
+    },
+    tap: {
+      scale: 0.99,
+      transition: { duration: 0.1, ease: "easeIn" }
+    }
+  }
+
+  // Memoize input update function to prevent unnecessary re-renders
+  const updateInput = useCallback((field: keyof SalaryInputs, value: any) => {
+    setInputs((prev) => {
+      // Only update if value actually changed
+      if (prev[field] === value) return prev
+      return { ...prev, [field]: value }
+    })
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }))
+    }
+  }, [errors])
+
+  const validateInput = (field: keyof SalaryInputs, value: number) => {
+    if (value < 0) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: isAmharic ? "አሉታዊ ቁጥር አይፈቀድም" : "Negative values are not allowed",
+      }))
+      return false
+    }
+    return true
+  }
+
+  const handleNumberInput = (field: keyof SalaryInputs, value: string) => {
+    // Allow empty string to clear the input
+    if (value === "") {
+      updateInput(field, 0)
+      return
+    }
+
+    const numValue = Number(value)
+    if (validateInput(field, numValue)) {
+      updateInput(field, numValue)
+    }
+  }
+
+  // Removed loading state check to fix infinite loading issue
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Skip to main content for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50"
+      >
+        {isAmharic ? "ወደ ዋና ይዘት ይሂዱ" : "Skip to main content"}
+      </a>
+
+      {/* Header */}
+      <header className="border-b bg-card" role="banner">
+        <div className="container mx-auto px-4 py-3 sm:py-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <Image
+                src="/images/ReactorTech.png"
+                alt={isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር ሎጎ" : "Ethiopian Salary Calculator Logo - Free Tax Calculator Tool"}
+                width={48}
+                height={48}
+                className="h-8 w-8 sm:h-12 sm:w-12 rounded-lg object-contain"
+                priority
+                sizes="(max-width: 640px) 32px, 48px"
+                quality={85}
+              />
+              <Image
+                src="/images/et.svg"
+                alt={isAmharic ? "የኢትዮጵያ ባንዲራ - የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Ethiopian Flag - Ethiopian Salary Calculator 2025"}
+                width={44}
+                height={44}
+                className="h-8 w-8 sm:h-11 sm:w-11 rounded-sm"
+                loading="lazy"
+                sizes="(max-width: 640px) 32px, 44px"
+                quality={85}
+              />
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-2xl font-bold text-foreground leading-tight break-words">
+                  {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር 2026 - የተጣራ ደመወዝ እና የገቢ ታክስ ካልኩሌተር" : "Ethiopian Salary Calculator 2026 - Calculate Your Net Pay & Income Tax"}
+                </h1>
+                <p className="hidden sm:block text-sm text-muted-foreground">
+                  {isAmharic ? "የተጣራ ደመወዝዎን ያስሉ" : "Calculate Your Take-Home Pay"}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="language-toggle" className="text-sm">
+                  {isAmharic ? "English" : "አማርኛ"}
+                </Label>
+                <Switch id="language-toggle" checked={isAmharic} onCheckedChange={setIsAmharic} />
+              </div>
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Skip Navigation for Accessibility */}
+      <a
+        href="#calculator"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50"
+      >
+        {isAmharic ? "ወደ ካልኩሌተር ይሂዱ" : "Skip to Calculator"}
+      </a>
+      {/* Dark Veil Background Section */}
+      <section className="mb-8 rounded-lg overflow-hidden relative" style={{ width: '100%' }}>
+        <div className="w-full h-[400px] md:h-[600px] relative">
+          <ColorBends
+            colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
+            rotation={30}
+            speed={0.3}
+            scale={1.2}
+            frequency={1.4}
+            warpStrength={1.2}
+            mouseInfluence={0.8}
+            parallax={0.6}
+            noise={0.08}
+            transparent={false}
+            backgroundColor="#0f172a"
+          />
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-gray-200 px-4 md:px-8 max-w-4xl">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg font-alfa-slab-one">
+              {isAmharic ? "ነፃ የኢትዮጵያ ደመወዝ ካልኩሌተር 2018" : "Free Ethiopian Salary Calculator 2026"}
+            </h1>
+            <p className="text-lg md:text-xl mb-6 drop-shadow-md opacity-90 text-gray-200 font-alfa-slab-one">
+              {isAmharic
+                ? "ትክክለኛውን የተጣራ ደመወዝዎን ያስሉ"
+                : "Calculate Your Net Pay & Income Tax"
+              }
+            </p>
+            <p className="text-base md:text-lg drop-shadow-md opacity-80 max-w-3xl mx-auto font-alfa-slab-one">
+              {isAmharic
+                ? <>የእኛ <strong>የኢትዮጵያ ደመወዝ ካልኩሌተር</strong> የቅርብ ጊዜ <strong>የኢትዮጵያ ታክስ ቅንጅቶች 2026</strong> በመጠቀም ትክክለኛውን የተጣራ ደመወዝዎን ለማስላት ይረዳዎታል።</>
+                : "Our Ethiopian salary calculator helps you calculate your exact take-home pay using the latest Ethiopia tax brackets 2026."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <main id="main-content" className="container mx-auto px-4 py-8" role="main">
+        <div id="calculator" className="grid gap-8 lg:grid-cols-2">
+          {/* Input Section */}
+          <InputSection
+            inputs={inputs}
+            errors={errors}
+            updateInput={updateInput}
+            isAmharic={isAmharic}
+            date={date}
+            setDate={setDate}
+            daysLeftForSalary={daysLeftForSalary}
+          />
+
+          {/* Divider for mobile */}
+          <div className="lg:hidden border-t border-border my-8"></div>
+
+          {/* Results Section */}
+          <div className="space-y-6 p-6 rounded-lg bg-card/30 border border-border/30">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-2">
+                {isAmharic ? "የደመወዝ ውጤት" : "Salary Results"}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {isAmharic ? "የእርስዎን የተጣራ ደመወዝ ይመልከቱ" : "View your take-home pay breakdown"}
+              </p>
+            </div>
+            {/* Results Tabs */}
+            <Tabs value={activeResultsTab} onValueChange={setActiveResultsTab} className="w-full">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+              >
+                <TabsList className="grid w-full grid-cols-4 gap-1 p-1 bg-muted rounded-lg h-12 [&>[data-state=active]]:bg-orange-500 [&>[data-state=active]]:text-white">
+                  <motion.div
+                    variants={tabTriggerVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    className="w-full motion-safe"
+                  >
+                    <TabsTrigger
+                      value="breakdown"
+                      className="w-full flex items-center justify-center gap-1 text-xs sm:text-sm data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md transition-all duration-200 h-10 px-2 hover:bg-muted-foreground/10 data-[state=inactive]:hover:bg-muted-foreground/5"
+                    >
+                      <FileText className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{isAmharic ? "ዝርዝር" : "Details"}</span>
+                    </TabsTrigger>
+                  </motion.div>
+                  <motion.div
+                    variants={tabTriggerVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    className="w-full motion-safe"
+                  >
+                    <TabsTrigger
+                      value="visualization"
+                      className="w-full flex items-center justify-center gap-1 text-xs sm:text-sm data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md transition-all duration-200 h-10 px-2 hover:bg-muted-foreground/10 data-[state=inactive]:hover:bg-muted-foreground/5"
+                    >
+                      <BarChart3 className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{isAmharic ? "ምስላዊ" : "Visual"}</span>
+                    </TabsTrigger>
+                  </motion.div>
+                  <motion.div
+                    variants={tabTriggerVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    className="w-full motion-safe"
+                  >
+                    <TabsTrigger
+                      value="whatif"
+                      className="w-full flex items-center justify-center gap-1 text-xs sm:text-sm data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md transition-all duration-200 h-10 px-2 hover:bg-muted-foreground/10 data-[state=inactive]:hover:bg-muted-foreground/5"
+                    >
+                      <Zap className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{isAmharic ? "ምን ቢሆን" : "What-If"}</span>
+                    </TabsTrigger>
+                  </motion.div>
+                  <motion.div
+                    variants={tabTriggerVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    className="w-full motion-safe"
+                  >
+                    <TabsTrigger
+                      value="export"
+                      className="w-full flex items-center justify-center gap-1 text-xs sm:text-sm data-[state=active]:!bg-orange-500 data-[state=active]:!text-white rounded-md transition-all duration-200 h-10 px-2 hover:bg-muted-foreground/10 data-[state=inactive]:hover:bg-muted-foreground/5"
+                    >
+                      <Share2 className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{isAmharic ? "ማጋራት" : "Share"}</span>
+                    </TabsTrigger>
+                  </motion.div>
+                </TabsList>
+              </motion.div>
+
+              <TabsContent value="breakdown" className="space-y-6">
+                <AnimatePresence mode="wait">
+                  {activeResultsTab === "breakdown" && (
+                    <motion.div
+                      key="breakdown"
+                      variants={tabVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      className="space-y-6 motion-safe"
+                    >
+                      {/* Salary Breakdown Card */}
+                      <SalaryBreakdownCard
+                        key={`${inputs.transportTaxable}-${inputs.housingTaxable}-${inputs.medicalTaxable}`}
+                        calculation={calculation}
+                        inputs={inputs}
+                        isAmharic={isAmharic}
+                      />
+
+                      {/* Currency Converter */}
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <CurrencyConverter netSalary={calculation.netSalary} isAmharic={isAmharic} />
+                      </Suspense>
+
+                      {/* Tax Information */}
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>{isAmharic ? "የታክስ መረጃ" : "Tax Information"}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="text-center p-3 bg-muted rounded-lg">
+                              <p className="text-2xl font-bold text-secondary">
+                                {(calculation.effectiveTaxRate * 100).toFixed(1)}%
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {isAmharic ? "ውጤታማ ታክስ መጠን" : "Effective Tax Rate"}
+                              </p>
+                            </div>
+                            <div className="text-center p-3 bg-muted rounded-lg">
+                              <p className="text-2xl font-bold text-accent">
+                                {(calculation.marginalTaxRate * 100).toFixed(0)}%
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {isAmharic ? "ወሳኝ ታክስ መጠን" : "Marginal Tax Rate"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="mt-4">
+                            <h4 className="font-semibold mb-2">
+                              {isAmharic ? "የታክስ ደረጃዎች" : "Tax Brackets (Proclamation No. 1395/2026)"}
+                            </h4>
+                            <div className="space-y-2 text-sm">
+                              {TAX_BRACKETS.map((bracket, index) => (
+                                <div key={index} className="flex justify-between">
+                                  <span>{bracket.label}</span>
+                                  <span>{(bracket.rate * 100).toFixed(0)}%</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </TabsContent>
+
+              <TabsContent value="visualization" className="space-y-6">
+                <AnimatePresence mode="wait">
+                  {activeResultsTab === "visualization" && (
+                    <motion.div
+                      key="visualization"
+                      variants={tabVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      className="space-y-6 motion-safe"
+                    >
+                      {/* Salary Visualization */}
+                      <Suspense fallback={<ChartLoading />}>
+                        <SalaryVisualization calculation={calculation} isAmharic={isAmharic} />
+                      </Suspense>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </TabsContent>
+
+              <TabsContent value="whatif" className="space-y-6">
+                <AnimatePresence mode="wait">
+                  {activeResultsTab === "whatif" && (
+                    <motion.div
+                      key="whatif"
+                      variants={tabVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      className="space-y-6 motion-safe"
+                    >
+                      {/* What-If Calculator */}
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <WhatIfCalculator baseInputs={inputs} baseCalculation={calculation} isAmharic={isAmharic} />
+                      </Suspense>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </TabsContent>
+
+              <TabsContent value="export" className="space-y-6">
+                <AnimatePresence mode="wait">
+                  {activeResultsTab === "export" && (
+                    <motion.div
+                      key="export"
+                      variants={tabVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      className="space-y-6 motion-safe"
+                    >
+                      {/* Export & Share Options */}
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <ExportShareOptions calculation={calculation} inputs={inputs} isAmharic={isAmharic} />
+                      </Suspense>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+
+        {/* SEO Content Section - After Calculator */}
+        <section className="tax-info mt-12 p-6 rounded-lg border bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-zinc-900 dark:to-zinc-800 border-orange-200 dark:border-border">
+          <h2 className="text-2xl font-bold text-foreground mb-4">
+            {isAmharic ? "የኢትዮጵያ ታክስ ስሌት መረዳት" : "Understanding Ethiopian Tax Calculation"}
+          </h2>
+          <p className="text-muted-foreground mb-4">
+            {isAmharic
+              ? <>የ<strong>ኢትዮጵያ ደመወዝ ካልኩሌተር</strong> ከፍተኛ ገቢ ያላቸው ሰዎች ተጨማሪ ታክስ የሚከፍሉበት የተለያዩ የታክስ ቅንጅቶችን ይጠቀማል። የእኛ <strong>የኢትዮጵያ PAYE ካልኩሌተር</strong> እነዚህን ተመኖች በራስ-ሰር ይተገብራል።</>
+              : <>The <strong>Ethiopian salary calculator</strong> uses progressive tax brackets where higher earners pay more tax. Our <strong>Ethiopia PAYE calculator</strong> automatically applies these rates:</>
+            }
+          </p>
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="space-y-2">
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>0 - 2,000 ETB:</span>
+                <span className="font-semibold text-green-600">0% tax</span>
+              </div>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>2,001 - 4,000 ETB:</span>
+                <span className="font-semibold text-blue-600">15% tax</span>
+              </div>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>4,001 - 7,000 ETB:</span>
+                <span className="font-semibold text-orange-600">20% tax</span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>7,001 - 10,000 ETB:</span>
+                <span className="font-semibold text-red-600">25% tax</span>
+              </div>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>10,001 - 14,000 ETB:</span>
+                <span className="font-semibold text-purple-600">30% tax</span>
+              </div>
+              <div className="flex justify-between p-2 rounded border bg-white dark:bg-card border-gray-200 dark:border-border text-foreground">
+                <span>14,001+ ETB:</span>
+                <span className="font-semibold text-red-800">35% tax</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Calculator Benefits Section */}
+        <section className="calculator-benefits mt-8 rounded-lg overflow-hidden relative" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
+          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+              <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-800" />
+            </div>
+          </div>
+          <div className="absolute inset-0 p-6 flex flex-col justify-center">
+            <h2 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
+              {isAmharic ? "የእኛን የኢትዮጵያ ደመወዝ ካልኩሌተር ለምን እንጠቀም?" : "Why Use Our Ethiopian Salary Calculator?"}
+            </h2>
+            <ul className="space-y-3 text-white">
+              <li className="flex items-center gap-3">
+                <span className="text-green-400 font-bold">✓</span>
+                {isAmharic ? <>በ2026 <strong>የኢትዮጵያ ታክስ ቅንጅቶች</strong> የተዘመነ</> : <>✓ Updated with 2026 <strong>Ethiopia tax brackets</strong></>}
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-400 font-bold">✓</span>
+                {isAmharic ? <>ትክክለኛ <strong>PAYE ታክስ ስሌት</strong></> : <>✓ Accurate <strong>PAYE tax calculation</strong></>}
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-400 font-bold">✓</span>
+                {isAmharic ? "የጡረታ አበል (7%) ያካተተ" : "✓ Includes pension contribution (7%)"}
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-400 font-bold">✓</span>
+                {isAmharic ? <>ነፃ <strong>የኢትዮጵያ የተጣራ ደመወዝ ካልኩሌተር</strong></> : <>✓ Free <strong>Ethiopian net salary calculator</strong></>}
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section id="faq-section" className="faq-section mt-12 rounded-lg overflow-hidden relative" style={{ width: '100%', height: 'min(600px, 90vh)' }}>
+          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+              <div className="w-full h-full bg-gradient-to-br from-indigo-900 to-cyan-800" />
+            </div>
+          </div>
+          <div className="absolute inset-0 p-6 overflow-y-auto">
+            <h2 className="text-2xl font-bold text-white mb-6 drop-shadow-lg">
+              {isAmharic ? "ተደጋግሞ የሚጠየቁ ጥያቄዎች - የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Frequently Asked Questions - Ethiopian Salary Calculator"}
+            </h2>
+
+            <div className="space-y-6">
+              <div className="faq-item p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {isAmharic ? "ይህ የኢትዮጵያ ደመወዝ ካልኩሌተር ምን ያህል ትክክለኛ ነው?" : "How accurate is this Ethiopian salary calculator?"}
+                </h3>
+                <p className="text-gray-200">
+                  {isAmharic
+                    ? <>የእኛ <strong>የኢትዮጵያ የገቢ ታክስ ካልኩሌተር</strong> ከሕግ ቁጥር 979/2016 አገር አቋራጭ PAYE ተመኖችን ይጠቀማል። ይህ የታክስ ካልኩሌተር በኢትዮጵያ ውስጥ ለሚሰሩ ሁሉም ሰራተኞች ትክክለኛ ውጤቶችን ይሰጣል።</>
+                    : <>Our <strong>Ethiopian income tax calculator</strong> uses the official PAYE rates from Proclamation No. 1395/2026. This tax calculator provides accurate results for all employees working in Ethiopia.</>
+                  }
+                </p>
+              </div>
+
+              <div className="faq-item p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {isAmharic ? "ኢትዮጵያ በ2026 ምን ዓይነት የታክስ ቅንጅቶች እንደሚጠቀም?" : "What tax brackets does Ethiopia use in 2026?"}
+                </h3>
+                <p className="text-gray-200">
+                  {isAmharic
+                    ? <>የ<strong>ኢትዮጵያ ታክስ ካልኩሌተር</strong> እነዚህን የተለያዩ ተመኖች ይተገብራል፡ 0-2,000 ብር (0%)፣ 2,001-4,000 ብር (15%)፣ 4,001-7,000 ብር (20%)፣ 7,001-10,000 ብር (25%)፣ 10,001-14,000 ብር (30%)፣ እና 14,001+ ብር (35%)።</>
+                    : <>The <strong>Ethiopia tax calculator</strong> applies these progressive rates: 0–2,000 ETB (0%), 2,001–4,000 ETB (15%), 4,001–7,000 ETB (20%), 7,001–10,000 ETB (25%), 10,001–14,000 ETB (30%), and 14,001+ ETB (35%).</>
+                  }
+                </p>
+              </div>
+
+              <div className="faq-item p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {isAmharic ? "የጡረታ አበል እንዴት ይሰላል?" : "How is pension contribution calculated?"}
+                </h3>
+                <p className="text-gray-200">
+                  {isAmharic
+                    ? "የጡረታ አበል ከጠቅላላ ደመወዝ 7% በሆነ መጠን ይሰላል። ይህ በኢትዮጵያ የሰራተኛ ሕግ መሰረት የሚያስፈልግ የጡረታ አበል ነው።"
+                    : "Pension contribution is calculated as 7% of your gross salary. This is a mandatory pension contribution required by Ethiopian labor law."
+                  }
+                </p>
+              </div>
+
+              <div className="faq-item p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {isAmharic ? "በአዲስ አበባ የሚሰሩ ሰዎች ምን ያህል ታክስ ይከፍላሉ?" : "How much tax do people working in Addis Ababa pay?"}
+                </h3>
+                <p className="text-gray-200">
+                  {isAmharic
+                    ? "በአዲስ አበባ የሚሰሩ ሰዎች በኢትዮጵያ ውስጥ በማንኛውም ቦታ የሚሰሩ ሰዎች ተመሳሳይ የታክስ ተመኖች ይከፍላሉ። የእኛ ካልኩሌተር ለአዲስ አበባ እና ለሌሎች የኢትዮጵያ ከተሞች ትክክለኛ ውጤቶችን ይሰጣል።"
+                    : "People working in Addis Ababa pay the same tax rates as employees anywhere in Ethiopia. Our calculator provides accurate results for Addis Ababa and other Ethiopian cities."
+                  }
+                </p>
+              </div>
+
+              <div className="faq-item p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር ለ HR ባለሙያዎች ይጠቅማል?" : "Is this Ethiopian salary calculator useful for HR professionals?"}
+                </h3>
+                <p className="text-gray-200">
+                  {isAmharic
+                    ? "አዎ፣ የእኛ ካልኩሌተር ለ HR ባለሙያዎች፣ አካውንታንቶች፣ እና የሰራተኛ አስተዳደር ባለሙያዎች በጣም ጠቃሚ ነው። ትክክለኛ የታክስ ስሌቶችን እና የደመወዝ አወቃቀሮችን ለማድረግ ይረዳል።"
+                    : "Yes, our calculator is extremely useful for HR professionals, accountants, and payroll specialists. It helps with accurate tax calculations and salary structuring for Ethiopian employees."
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Related Tools Section */}
+        <section className="related-tools mt-12 rounded-lg overflow-hidden relative" style={{ width: '100%', height: 'min(400px, 80vh)' }}>
+          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+              <div className="w-full h-full bg-gradient-to-br from-purple-900 to-pink-800" />
+            </div>
+          </div>
+          <div className="absolute inset-0 p-6 flex flex-col justify-center">
+            <h2 className="text-2xl font-bold text-white mb-4 drop-shadow-lg">
+              {isAmharic ? "ተዛማጅ የኢትዮጵያ የገንዘብ መሳሪያዎች" : "Related Ethiopian Financial Tools"}
+            </h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">
+                <h3 className="font-semibold text-white mb-2">
+                  {isAmharic ? "የኢትዮጵያ የገንዘብ አያያዝ ካልኩሌተር" : "Ethiopian Budget Calculator"}
+                </h3>
+                <p className="text-sm text-gray-200 mb-3">
+                  {isAmharic ? "የወራዊ ወጪዎችዎን እና የገቢዎን አያያዝ ያስሉ" : "Calculate your monthly expenses and income management"}
+                </p>
+                <a href="#" className="text-blue-300 hover:text-blue-200 text-sm font-medium">
+                  {isAmharic ? "ይጀምሩ" : "Get Started"} →
+                </a>
+              </div>
+              <div className="p-4 bg-black/20 backdrop-blur-sm rounded-lg border border-white/20">
+                <h3 className="font-semibold text-white mb-2">
+                  {isAmharic ? "የኢትዮጵያ የጡረታ ካልኩሌተር" : "Ethiopian Pension Calculator"}
+                </h3>
+                <p className="text-sm text-gray-200 mb-3">
+                  {isAmharic ? "የጡረታ አበልዎን እና የጡረታ ክፍያዎን ያስሉ" : "Calculate your pension contributions and retirement benefits"}
+                </p>
+                <a href="#" className="text-blue-300 hover:text-blue-200 text-sm font-medium">
+                  {isAmharic ? "ይጀምሩ" : "Get Started"} →
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t bg-card mt-16">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Calculator className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-foreground">
+                  {isAmharic ? "የኢትዮጵያ ደመወዝ ካልኩሌተር" : "Ethiopian Salary Calculator"}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {isAmharic ? "በ Robera Mekonnen የተሰላ" : "Developed by Robera Mekonnen"}
+                </p>
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <p>
+                {isAmharic
+                  ? "© 2026 የኢትዮጵያ ደመወዝ ካልኩሌተር - በ Robera Mekonnen የተሰላ"
+                  : "© 2026 Ethiopian Salary Calculator - Developed by Robera Mekonnen"
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

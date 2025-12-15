@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 9%;
+  --card: 0 0% 98%;
+  --card-foreground: 0 0% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 9%;
+  --primary: 142 76% 36%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 45 100% 50%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 45 100% 50%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 90%;
+  --input: 0 0% 100%;
+  --ring: 142 76% 36%;
+  --chart-1: 142 76% 36%;
+  --chart-2: 45 100% 50%;
+  --chart-3: 0 0% 9%;
+  --chart-4: 142 50% 50%;
+  --chart-5: 45 80% 70%;
+  --radius: 0.625rem;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 0 0% 9%;
+  --sidebar-primary: 142 76% 36%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 45 100% 50%;
+  --sidebar-accent-foreground: 0 0% 9%;
+  --sidebar-border: 0 0% 90%;
+  --sidebar-ring: 142 76% 36%;
+}
+
+.dark {
+  --background: 0 0% 9%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 20%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 20%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 142 70% 50%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 45 90% 60%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 25%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 45 90% 60%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 85% 65%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 30%;
+  --input: 0 0% 25%;
+  --ring: 142 70% 50%;
+  --chart-1: 142 70% 50%;
+  --chart-2: 45 90% 60%;
+  --chart-3: 0 0% 98%;
+  --chart-4: 142 50% 40%;
+  --chart-5: 45 80% 50%;
+  --sidebar: 0 0% 20%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-primary: 142 70% 50%;
+  --sidebar-primary-foreground: 0 0% 9%;
+  --sidebar-accent: 45 90% 60%;
+  --sidebar-accent-foreground: 0 0% 9%;
+  --sidebar-border: 0 0% 30%;
+  --sidebar-ring: 142 70% 50%;
+}
+
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overflow-x: hidden;
+  }
+
+  /* Smooth scrolling for all elements */
+  * {
+    scroll-behavior: smooth;
+  }
+
+  /* Performance optimizations */
+
+
+  /* Optimize animations */
+  .motion-safe {
+    will-change: transform, opacity;
+  }
+
+  /* Critical CSS for above-the-fold content */
+  .hero-section {
+    contain: layout style paint;
+    content-visibility: auto;
+  }
+
+  /* Optimize images */
+  img {
+    content-visibility: auto;
+  }
+
+  /* Reduce paint complexity */
+  .card {
+    contain: layout style;
+  }
+
+  /* Optimize scrolling */
+  .scroll-container {
+    contain: strict;
+    overflow: auto;
+  }
+
+  /* Reduce layout thrashing */
+  .stable-layout {
+    contain: layout;
+  }
+
+  /* Custom placeholder styling for more subtle appearance */
+  input::placeholder {
+    @apply text-muted-foreground/60;
+    font-weight: 400;
+  }
+
+  /* Dark mode placeholder styling */
+  .dark input::placeholder {
+    @apply text-muted-foreground/50;
+  }
+
+  /* Enhanced switch visibility */
+  [data-slot="switch"] {
+    @apply border-muted-foreground/30;
+  }
+
+  [data-slot="switch"]:not([data-state="checked"]) {
+    @apply bg-muted-foreground/25;
+  }
+
+  [data-slot="switch-thumb"] {
+    @apply shadow-md;
+  }
+}
+
+@layer utilities {
+  .font-alfa-slab-one {
+    font-family: 'Alfa Slab One', serif;
+  }
+}
