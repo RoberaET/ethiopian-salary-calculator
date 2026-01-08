@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://ethiopiansalarycalculator.com'
+    const baseUrl = 'https://ethiopiansalarycalculator.vercel.app'
     return [
         {
             url: baseUrl,
