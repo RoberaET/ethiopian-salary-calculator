@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { Separator } from "@/components/ui/separator"
 import { Share2, Mail, FileText, Copy, Check, Download } from "lucide-react"
 import { formatCurrency, type SalaryCalculation, type SalaryInputs } from "@/lib/salary-calculator"
@@ -374,7 +374,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-2">
             <div className="space-y-2 col-span-2">
-              <Label htmlFor="companyName" className="text-gray-300">{isAmharic ? "የኩባንያ ስም" : "Company Name"}</Label>
+              <label htmlFor="companyName" className="text-gray-300 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የኩባንያ ስም" : "Company Name"}</label>
               <Input
                 id="companyName"
                 value={pdfDetails.companyName}
@@ -385,7 +385,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
             </div>
 
             <div className="space-y-2 col-span-2">
-              <Label htmlFor="employeeName" className="text-gray-300">{isAmharic ? "የሰራተኛ ስም" : "Employee Name"}</Label>
+              <label htmlFor="employeeName" className="text-gray-300 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የሰራተኛ ስም" : "Employee Name"}</label>
               <Input
                 id="employeeName"
                 value={pdfDetails.employeeName}
@@ -396,7 +396,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="designation" className="text-gray-300">{isAmharic ? "ስራ መደብ" : "Designation"}</Label>
+              <label htmlFor="designation" className="text-gray-300 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ስራ መደብ" : "Designation"}</label>
               <Input
                 id="designation"
                 value={pdfDetails.designation}
@@ -407,7 +407,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="monthYear" className="text-gray-300">{isAmharic ? "ወር እና ዓመት" : "Month & Year"}</Label>
+              <label htmlFor="monthYear" className="text-gray-300 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ወር እና ዓመት" : "Month & Year"}</label>
               <Input
                 id="monthYear"
                 value={pdfDetails.monthYear}
@@ -418,7 +418,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bankName" className="text-gray-300">{isAmharic ? "የባንክ ስም" : "Bank Name"}</Label>
+              <label htmlFor="bankName" className="text-gray-300 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የባንክ ስም" : "Bank Name"}</label>
               <Input
                 id="bankName"
                 value={pdfDetails.bankName}
@@ -429,7 +429,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="chequeNo" className="text-gray-300">{isAmharic ? "የቼክ ቁ." : "Cheque No."}</Label>
+              <label htmlFor="chequeNo" className="text-gray-300 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የቼክ ቁ." : "Cheque No."}</label>
               <Input
                 id="chequeNo"
                 value={pdfDetails.chequeNo}
@@ -457,7 +457,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
             <div className="w-full max-w-sm rounded-md border bg-card p-4 shadow-lg">
               <h4 className="mb-3 text-sm font-semibold">{isAmharic ? "ኢሜይል ላክ" : "Send Invoice Email"}</h4>
               <div className="space-y-2">
-                <Label htmlFor="recipient">{isAmharic ? "የተቀባዩ ኢሜይል" : "Recipient Email"}</Label>
+                <label htmlFor="recipient" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የተቀባዩ ኢሜይል" : "Recipient Email"}</label>
                 <Input
                   id="recipient"
                   type="email"

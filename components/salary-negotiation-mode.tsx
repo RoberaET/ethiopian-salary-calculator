@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
@@ -25,7 +25,7 @@ export function SalaryNegotiationMode({ inputs, onGrossSalaryChange, isAmharic }
   // Memoize the calculation to prevent excessive re-computations
   const calculatedGross = useMemo(() => {
     if (!isNegotiationMode || desiredNetSalary <= 0) return 0
-    
+
     const allowancesOnly = {
       ...inputs,
       grossSalary: 0, // Will be calculated
@@ -73,9 +73,9 @@ export function SalaryNegotiationMode({ inputs, onGrossSalaryChange, isAmharic }
       {isNegotiationMode && (
         <CardContent className="space-y-4">
           <div>
-            <Label htmlFor="desired-net-salary">
+            <label htmlFor="desired-net-salary" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               {isAmharic ? "የሚፈለግ የተጣራ ደመወዝ (ብር)" : "Desired Net Salary (ETB)"}
-            </Label>
+            </label>
             <Input
               id="desired-net-salary"
               type="number"

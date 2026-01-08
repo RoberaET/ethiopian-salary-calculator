@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
@@ -148,9 +148,9 @@ export function ImpactCalculator({ baseInputs, baseCalculation, isAmharic, curre
                         {isAmharic ? "ተጽዕኖ ካልኩሌተር" : "Impact Calculator"}
                     </CardTitle>
                     <div className="flex items-center gap-2">
-                        <Label htmlFor="annual-mode" className="text-xs text-gray-400">
+                        <label htmlFor="annual-mode" className="text-xs text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                             {isAmharic ? "ዓመታዊ" : "Yearly"}
-                        </Label>
+                        </label>
                         <Switch
                             id="annual-mode"
                             checked={isAnnual}
@@ -205,7 +205,7 @@ export function ImpactCalculator({ baseInputs, baseCalculation, isAmharic, curre
                         {/* Gross Salary */}
                         <div className="space-y-2">
                             <div className="flex justify-between text-xs">
-                                <Label className="text-gray-400">{isAmharic ? "መሰረታዊ ደመወዝ" : "Gross Salary"}</Label>
+                                <label className="text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "መሰረታዊ ደመወዝ" : "Gross Salary"}</label>
                                 <span className="text-gray-500">{isAmharic ? "አሁን" : "Current"}: {formatDisplayCurrency(baseInputs.grossSalary)}</span>
                             </div>
                             <Input
@@ -219,7 +219,7 @@ export function ImpactCalculator({ baseInputs, baseCalculation, isAmharic, curre
                         {/* Taxable Allowances */}
                         <div className="space-y-2">
                             <div className="flex justify-between text-xs">
-                                <Label className="text-gray-400">{isAmharic ? "ታክስ የሚከፈልባቸው አበሎች" : "Taxable Allowances"}</Label>
+                                <label className="text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ታክስ የሚከፈልባቸው አበሎች" : "Taxable Allowances"}</label>
                                 <span className="text-gray-500">{formatDisplayCurrency(baseTaxableAllowances)}</span>
                             </div>
                             <Input
@@ -233,7 +233,7 @@ export function ImpactCalculator({ baseInputs, baseCalculation, isAmharic, curre
                         {/* Non-Taxable Allowances */}
                         <div className="space-y-2">
                             <div className="flex justify-between text-xs">
-                                <Label className="text-gray-400">{isAmharic ? "ታክስ የማይከፈልባቸው አበሎች" : "Non-Taxable Allowances"}</Label>
+                                <label className="text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ታክስ የማይከፈልባቸው አበሎች" : "Non-Taxable Allowances"}</label>
                                 <span className="text-gray-500">{formatDisplayCurrency(baseNonTaxableAllowances)}</span>
                             </div>
                             <Input
@@ -247,7 +247,7 @@ export function ImpactCalculator({ baseInputs, baseCalculation, isAmharic, curre
                         {/* Deductions */}
                         <div className="space-y-2">
                             <div className="flex justify-between text-xs">
-                                <Label className="text-gray-400">{isAmharic ? "ጠቅላላ ቅናሾች" : "Total Deductions"}</Label>
+                                <label className="text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ጠቅላላ ቅናሾች" : "Total Deductions"}</label>
                                 <span className="text-gray-500">{formatDisplayCurrency(baseDeductions)}</span>
                             </div>
                             <Input

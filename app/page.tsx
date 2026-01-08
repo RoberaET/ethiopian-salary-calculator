@@ -212,30 +212,28 @@ export default function EthiopianSalaryCalculator() {
 
           <div className="flex items-center gap-4">
             {/* Toggles Container */}
-            <ClientOnly>
-              <div className="flex items-center gap-2 bg-white/5 p-1.5 px-3 rounded-full border border-white/5 hover:border-white/10 transition-colors">
-                {/* Language Toggle */}
-                <div className="flex items-center gap-2 border-r border-white/10 pr-3 mr-1">
-                  <label htmlFor="language-toggle" className="text-xs font-medium cursor-pointer text-gray-400 hover:text-gray-200 transition-colors">
-                    {isAmharic ? "አማርኛ" : "English"}
-                  </label>
-                  <Switch id="language-toggle" checked={isAmharic} onCheckedChange={setIsAmharic} className="scale-75 data-[state=checked]:bg-emerald-500" />
-                </div>
-
-                {/* Currency Toggle */}
-                <div className="flex items-center gap-2 pl-1">
-                  <label htmlFor="currency-toggle" className="text-xs font-medium cursor-pointer text-gray-400 hover:text-gray-200 transition-colors">
-                    {currency}
-                  </label>
-                  <Switch
-                    id="currency-toggle"
-                    checked={currency === "USD"}
-                    onCheckedChange={(c) => setCurrency(c ? "USD" : "ETB")}
-                    className="scale-75 data-[state=checked]:bg-blue-500"
-                  />
-                </div>
+            <div className="flex items-center gap-2 bg-white/5 p-1.5 px-3 rounded-full border border-white/5 hover:border-white/10 transition-colors" suppressHydrationWarning>
+              {/* Language Toggle */}
+              <div className="flex items-center gap-2 border-r border-white/10 pr-3 mr-1">
+                <label htmlFor="language-toggle" className="text-xs font-medium cursor-pointer text-gray-400 hover:text-gray-200 transition-colors">
+                  {isAmharic ? "አማርኛ" : "English"}
+                </label>
+                <Switch id="language-toggle" checked={isAmharic} onCheckedChange={setIsAmharic} className="scale-75 data-[state=checked]:bg-emerald-500" />
               </div>
-            </ClientOnly>
+
+              {/* Currency Toggle */}
+              <div className="flex items-center gap-2 pl-1">
+                <label htmlFor="currency-toggle" className="text-xs font-medium cursor-pointer text-gray-400 hover:text-gray-200 transition-colors">
+                  {currency}
+                </label>
+                <Switch
+                  id="currency-toggle"
+                  checked={currency === "USD"}
+                  onCheckedChange={(c) => setCurrency(c ? "USD" : "ETB")}
+                  className="scale-75 data-[state=checked]:bg-blue-500"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </nav>

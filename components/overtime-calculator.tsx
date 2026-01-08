@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Clock, Plus, Trash2 } from "lucide-react"
@@ -95,13 +95,10 @@ export function OvertimeCalculator({ baseSalary, overtimePay, onOvertimeChange, 
           {entries.map((entry, index) => (
             <div key={entry.id} className="grid grid-cols-1 gap-2 sm:grid-cols-12 items-end animate-in fade-in slide-in-from-top-1 duration-200 border-b border-white/5 pb-3 mb-3 last:border-0 last:pb-0 last:mb-0 sm:border-0 sm:pb-0 sm:mb-2">
               <div className="grid grid-cols-2 gap-2 sm:col-span-3">
-                <div className="col-span-2 sm:col-span-1">
-                  <label className="text-xs text-gray-400 mb-1.5 block sm:hidden">
+                <div className="w-[100px]">
+                  <label className="text-xs font-medium mb-1.5 block text-gray-400">
                     {isAmharic ? "ሰዓት" : "Hours"}
                   </label>
-                  <Label className="text-xs text-gray-400 mb-1.5 hidden sm:block">
-                    {index === 0 ? (isAmharic ? "ሰዓት" : "Hours") : ""}
-                  </Label>
                   <Input
                     type="number"
                     value={entry.hours || ""}
@@ -114,13 +111,10 @@ export function OvertimeCalculator({ baseSalary, overtimePay, onOvertimeChange, 
                 </div>
               </div>
 
-              <div className="sm:col-span-8">
-                <Label className="text-xs text-gray-400 mb-1.5 block sm:hidden">
-                  {isAmharic ? "መጠን" : "Rate Type"}
-                </Label>
-                <Label className="text-xs text-gray-400 mb-1.5 hidden sm:block">
-                  {index === 0 ? (isAmharic ? "መጠን" : "Rate Type") : ""}
-                </Label>
+              <div className="sm:col-span-8 flex-1 min-w-[140px]">
+                <label className="text-xs font-medium mb-1.5 block text-gray-400">
+                  {isAmharic ? "ያለፈ ሰዓት አይነት" : "Rate Type"}
+                </label>
                 <Select
                   value={entry.rate}
                   onValueChange={(val) => updateEntry(entry.id, "rate", val)}

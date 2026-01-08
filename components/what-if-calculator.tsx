@@ -3,7 +3,6 @@
 import { useState, useMemo, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
-import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { TrendingUp, Zap } from "lucide-react"
@@ -38,7 +37,7 @@ export function WhatIfCalculator({ baseInputs, baseCalculation, isAmharic }: Wha
     const netSalaryPercent = baseCalculation.netSalary > 0 ? (netSalaryDiff / baseCalculation.netSalary) * 100 : 0
     const taxDiff = whatIfCalculation.incomeTax - baseCalculation.incomeTax
     const taxPercent = baseCalculation.incomeTax > 0 ? (taxDiff / baseCalculation.incomeTax) * 100 : 0
-    
+
     return { netSalaryDiff, netSalaryPercent, taxDiff, taxPercent }
   }, [whatIfCalculation, baseCalculation])
 
@@ -56,7 +55,7 @@ export function WhatIfCalculator({ baseInputs, baseCalculation, isAmharic }: Wha
         {/* Salary Adjustment */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label>{isAmharic ? "የደመወዝ ለውጥ" : "Salary Adjustment"}</Label>
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የደመወዝ ለውጥ" : "Salary Adjustment"}</label>
             <Badge variant="outline">{salaryMultiplier[0]}%</Badge>
           </div>
           <Slider
@@ -77,7 +76,7 @@ export function WhatIfCalculator({ baseInputs, baseCalculation, isAmharic }: Wha
         {/* Allowance Adjustment */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label>{isAmharic ? "የአበል ለውጥ" : "Allowance Adjustment"}</Label>
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የአበል ለውጥ" : "Allowance Adjustment"}</label>
             <Badge variant="outline">{allowanceMultiplier[0]}%</Badge>
           </div>
           <Slider
@@ -98,7 +97,7 @@ export function WhatIfCalculator({ baseInputs, baseCalculation, isAmharic }: Wha
         {/* Overtime Hours */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label>{isAmharic ? "ተጨማሪ ሰዓቶች (በወር)" : "Overtime Hours (Monthly)"}</Label>
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ተጨማሪ ሰዓቶች (በወር)" : "Overtime Hours (Monthly)"}</label>
             <Badge variant="outline">{overtimeHours[0]}h</Badge>
           </div>
           <Slider value={overtimeHours} onValueChange={setOvertimeHours} min={0} max={80} step={4} className="w-full" />
@@ -121,8 +120,10 @@ export function WhatIfCalculator({ baseInputs, baseCalculation, isAmharic }: Wha
           <div className="grid grid-cols-2 gap-4">
             {/* Current vs What-If Net Salary */}
             <div className="p-3 bg-muted rounded-lg">
-              <p className="text-xs text-muted-foreground mb-1">{isAmharic ? "አሁን" : "Current"}</p>
-              <p className="font-semibold">{formatCurrency(baseCalculation.netSalary)}</p>
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ወር" : "Month"}</label>
+                <div className="flex items-center gap-2">{formatCurrency(baseCalculation.netSalary)}</div>
+              </div>
             </div>
             <div className="p-3 bg-primary/10 rounded-lg">
               <p className="text-xs text-muted-foreground mb-1">{isAmharic ? "ምን ቢሆን" : "What-If"}</p>

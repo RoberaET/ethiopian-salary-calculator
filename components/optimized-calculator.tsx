@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense, lazy, useMemo, useCallback, memo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calculator, DollarSign, Settings, FileText, BarChart3, Zap, Share2, Loader2 } from "lucide-react"
@@ -162,9 +161,9 @@ const InputSection = memo(function InputSection({
                     </div>
 
                     <div className="space-y-3">
-                      <Label htmlFor="grossSalary" className="text-sm font-medium text-gray-300 uppercase tracking-wider ml-1">
+                      <label htmlFor="grossSalary" className="text-sm font-medium text-gray-300 uppercase tracking-wider ml-1">
                         {isAmharic ? "ጠቅላላ ደመወዝ (ETB)" : "Gross Salary Amount"}
-                      </Label>
+                      </label>
                       <div className="relative group/input">
                         <Input
                           id="grossSalary"
@@ -285,9 +284,9 @@ const InputSection = memo(function InputSection({
 
                     <div className="space-y-6">
                       <div className="space-y-3">
-                        <Label htmlFor="unionDues" className="text-sm font-medium text-gray-300">
+                        <label htmlFor="unionDues" className="text-sm font-medium text-gray-300">
                           {isAmharic ? "የሰራተኛ ማህበር ቅናሽ (ETB)" : "Union Dues"}
-                        </Label>
+                        </label>
                         <Input
                           id="unionDues"
                           type="number"
@@ -301,7 +300,7 @@ const InputSection = memo(function InputSection({
                       {/* Custom loan deductions */}
                       <div className="space-y-4 pt-4 border-t border-white/5">
                         <div className="flex items-center justify-between">
-                          <Label className="text-sm font-medium text-gray-300">{isAmharic ? "የብድር ቅናሾች" : "Loans & Repayments"}</Label>
+                          <label className="text-sm font-medium text-gray-300">{isAmharic ? "የብድር ቅናሾች" : "Loans & Repayments"}</label>
                           <button
                             type="button"
                             onClick={addLoan}
@@ -348,7 +347,7 @@ const InputSection = memo(function InputSection({
                       {/* Custom other deductions */}
                       <div className="space-y-4 pt-4 border-t border-white/5">
                         <div className="flex items-center justify-between">
-                          <Label className="text-sm font-medium text-gray-300">{isAmharic ? "ሌሎች ቅናሾች" : "Other Deductions"}</Label>
+                          <label className="text-sm font-medium text-gray-300">{isAmharic ? "ሌሎች ቅናሾች" : "Other Deductions"}</label>
                           <button
                             type="button"
                             onClick={addOtherDeduction}

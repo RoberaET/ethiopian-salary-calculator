@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Trash2, Plus } from "lucide-react"
@@ -123,7 +122,7 @@ export function DynamicInputSection({
             <div key={allowance.id} className="p-4 border rounded-lg space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <Label htmlFor={`allowance-name-${allowance.id}`}>{isAmharic ? "የአበል ስም" : "Allowance Name"}</Label>
+                  <label htmlFor={`allowance-name-${allowance.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የአበል ስም" : "Allowance Name"}</label>
                   <Input
                     id={`allowance-name-${allowance.id}`}
                     value={allowance.name}
@@ -173,7 +172,7 @@ export function DynamicInputSection({
           {loans.map((loan) => (
             <div key={loan.id} className="flex items-end gap-3 p-3 border rounded-lg">
               <div className="flex-1">
-                <Label htmlFor={`loan-name-${loan.id}`} className="block mb-2">{isAmharic ? "የብድር ዓይነት" : "Loan Description"}</Label>
+                <label htmlFor={`loan-name-${loan.id}`} className="block mb-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "የብድር ዓይነት" : "Loan Description"}</label>
                 <Input
                   id={`loan-name-${loan.id}`}
                   value={loan.name}
@@ -183,7 +182,7 @@ export function DynamicInputSection({
                 />
               </div>
               <div className="flex-1">
-                <Label htmlFor={`loan-amount-${loan.id}`} className="block mb-2">{isAmharic ? "ወራዊ ክፍያ (ብር)" : "Monthly Payment (ETB)"}</Label>
+                <label htmlFor={`loan-amount-${loan.id}`} className="block mb-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "ወራዊ ክፍያ (ብር)" : "Monthly Payment (ETB)"}</label>
                 <Input
                   id={`loan-amount-${loan.id}`}
                   type="number"
@@ -221,9 +220,9 @@ export function DynamicInputSection({
           {deductions.map((deduction) => (
             <div key={deduction.id} className="flex items-end gap-3 p-3 border rounded-lg">
               <div className="flex-1">
-                <Label htmlFor={`deduction-name-${deduction.id}`} className="block mb-2">
+                <label htmlFor={`deduction-name-${deduction.id}`} className="block mb-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   {isAmharic ? "የቅናሽ ዓይነት" : "Deduction Description"}
-                </Label>
+                </label>
                 <Input
                   id={`deduction-name-${deduction.id}`}
                   value={deduction.name}
@@ -233,7 +232,7 @@ export function DynamicInputSection({
                 />
               </div>
               <div className="flex-1">
-                <Label htmlFor={`deduction-amount-${deduction.id}`} className="block mb-2">{isAmharic ? "መጠን (ብር)" : "Amount (ETB)"}</Label>
+                <label htmlFor={`deduction-amount-${deduction.id}`} className="block mb-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{isAmharic ? "መጠን (ብር)" : "Amount (ETB)"}</label>
                 <Input
                   id={`deduction-amount-${deduction.id}`}
                   type="number"

@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calculator, Percent } from "lucide-react"
@@ -89,7 +89,9 @@ export function PercentageInput({
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium !text-green-400 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{label}</label>
+        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
+          {label}
+        </label>
         <div className="flex items-center gap-2">
           <label htmlFor={`${label.toLowerCase().replace(/\s+/g, '-')}-taxable`} className="text-xs text-muted-foreground text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             {isAmharic ? "ታክስ" : "Taxable"}
