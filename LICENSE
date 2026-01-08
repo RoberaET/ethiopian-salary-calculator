@@ -1,0 +1,60 @@
+MIT License with Mandatory Attribution
+
+Copyright (c) 2025 ROBERA MEKONNEN
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+1. The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+2. MANDATORY ATTRIBUTION: If you use, copy, modify, or distribute this software
+   in any way, you MUST provide clear and visible attribution to the original
+   author (ROBERA MEKONNEN) in ALL of the following ways:
+
+   a) In your project's README.md file, include:
+      "Ethiopian Salary Calculator - Original code by ROBERA MEKONNEN"
+      
+   b) In your code files, add a comment at the top:
+      "// Original code by ROBERA MEKONNEN - Ethiopian Salary Calculator"
+      
+   c) In your project's about/credits section, include:
+      "Powered by ROBERA MEKONNEN's Ethiopian Salary Calculator"
+      
+   d) If you host this online, link back to the original repository
+
+3. The attribution must be:
+   - Visible to end users (not hidden in source code only)
+   - Prominently displayed
+   - Cannot be removed or modified
+   - Must include the author's name "ROBERA MEKONNEN"
+
+4. Commercial use is permitted ONLY if proper attribution is provided.
+
+5. You may NOT:
+   - Remove or modify attribution requirements
+   - Claim this code as your own
+   - Use this code without giving credit
+   - Distribute without attribution
+
+VIOLATION OF ATTRIBUTION REQUIREMENTS WILL RESULT IN LICENSE TERMINATION.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+MANDATORY ATTRIBUTION REQUIREMENTS:
+- Original Author: ROBERA MEKONNEN
+- Project: Ethiopian Salary Calculator
+- Year: 2025
+- Attribution must be visible to end users
+- Attribution cannot be removed or hidden
+- Commercial use requires attribution

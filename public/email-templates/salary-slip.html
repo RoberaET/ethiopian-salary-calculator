@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Salary Slip</title>
+    <style>
+      :root { color-scheme: light only }
+      body { margin: 0; background: #f6f7fb; font-family: Arial, Helvetica, sans-serif; }
+      .wrap { padding: 24px; }
+      .card { max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #ececf1; border-radius: 16px; box-shadow: 0 8px 24px rgba(16,24,40,0.08); overflow: hidden; }
+      .header { padding: 20px 24px 10px; }
+      .badge { font-size: 12px; color: #6366f1; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+      .title { margin: 6px 0 0; font-size: 22px; line-height: 28px; font-weight: 700; color: #111827; }
+      .sub { margin: 4px 0 0; font-size: 13px; color: #6b7280; }
+      .section { padding: 12px 24px; border-top: 1px solid #f3f4f6; }
+      .section h3 { margin: 0 0 8px; font-size: 12px; font-weight: 700; color: #111827; letter-spacing: .06em; text-transform: uppercase; }
+      .row { font-size: 14px; color: #111827; line-height: 20px; margin: 6px 0; }
+      .row span { display: inline-block; width: 49%; vertical-align: top; }
+      .row span:last-child { text-align: right; }
+      .row-strong { font-weight: 700; font-size: 18px; line-height: 24px; }
+      .footer { padding: 12px 24px 20px; font-size: 12px; color: #6b7280; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="header">
+          <div class="badge">Salary Slip</div>
+          <h1 class="title">{{companyName}}</h1>
+          <p class="sub">Date: {{invoiceDate}}</p>
+        </div>
+
+        <div class="section">
+          <h3>Gross Income</h3>
+          <div class="row"><span>Basic Salary</span><span>{{grossSalary}}</span></div>
+          <div class="row"><span>Total Allowances</span><span>{{totalAllowances}}</span></div>
+        </div>
+
+        <div class="section">
+          <h3>Deductions</h3>
+          <div class="row"><span>Income Tax (PAYE)</span><span>{{incomeTax}}</span></div>
+          <div class="row"><span>Pension Contribution (7%)</span><span>{{pension}}</span></div>
+        </div>
+
+        <div class="section">
+          <h3>Net Salary</h3>
+          <div class="row row-strong"><span>NET SALARY</span><span>{{netSalary}}</span></div>
+        </div>
+
+        <div class="section">
+          <h3>Tax Information</h3>
+          <div class="row"><span>Effective Tax Rate</span><span>{{effectiveTaxRate}}</span></div>
+          <div class="row"><span>Marginal Tax Rate</span><span>{{marginalTaxRate}}</span></div>
+        </div>
+
+        <div class="footer">Calculated by Robera Mekonnen</div>
+      </div>
+    </div>
+  </body>
+  </html>
+
