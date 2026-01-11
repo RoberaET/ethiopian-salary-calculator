@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://ethiopiansalarycalculator.vercel.app',
+  siteUrl: 'https://ethiopiasalarycalculator.netlify.app',
   generateRobotsTxt: true,
   sitemapSize: 7000,
   changefreq: 'weekly',

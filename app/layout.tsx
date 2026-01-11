@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://ethiopiansalarycalculator.com'),
+  metadataBase: new URL('https://ethiopiasalarycalculator.netlify.app'),
   alternates: {
     canonical: '/',
     languages: {
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Ethiopian Salary Calculator 2026 - Free Tax & Net Pay | Real-time',
     description: 'Calculate your Ethiopian net salary, income tax (PAYE), pension and overtime. Features real-time currency conversion (USD/ETB) and 2026 tax rates.',
-    url: 'https://ethiopiansalarycalculator.com',
+    url: 'https://ethiopiasalarycalculator.netlify.app',
     siteName: 'Ethiopian Salary Calculator',
     images: [
       {
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'google-site-verification=YOUR_VERIFICATION_CODE', // User should update this
+    google: 'WGR5bwWnV9ZZsv5nznim2JgYQiX3cMJv1MzVRp51Wpo',
   },
   appleWebApp: {
     title: 'Ethiopian Salary Calculator',
@@ -212,8 +212,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Ethiopian Salary Calculator",
-              "url": "https://ethiopiansalarycalculator.vercel.app",
-              "logo": "https://ethiopiansalarycalculator.vercel.app/icon"
+              "url": "https://ethiopiasalarycalculator.netlify.app",
+              "logo": "https://ethiopiasalarycalculator.netlify.app/icon"
             })
           }}
         />
@@ -224,10 +224,10 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "Ethiopian Salary Calculator",
-              "url": "https://ethiopiansalarycalculator.vercel.app",
+              "url": "https://ethiopiasalarycalculator.netlify.app",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://ethiopiansalarycalculator.vercel.app/?q={search_term_string}",
+                "target": "https://ethiopiasalarycalculator.netlify.app/?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })
@@ -242,7 +242,7 @@ export default function RootLayout({
               "@type": "WebApplication",
               "name": "Ethiopian Salary Calculator",
               "description": "Calculate Ethiopian salary, income tax (PAYE), and net pay with 2026 tax brackets",
-              "url": "https://ethiopiansalarycalculator.vercel.app",
+              "url": "https://ethiopiasalarycalculator.netlify.app",
               "applicationCategory": "FinanceApplication",
               "operatingSystem": "Any",
               "browserRequirements": "Requires JavaScript",
@@ -320,19 +320,19 @@ export default function RootLayout({
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Home",
-                  "item": "https://ethiopiansalarycalculator.vercel.app"
+                  "item": "https://ethiopiasalarycalculator.netlify.app"
                 },
                 {
                   "@type": "ListItem",
                   "position": 2,
                   "name": "Ethiopian Salary Calculator",
-                  "item": "https://ethiopiansalarycalculator.vercel.app"
+                  "item": "https://ethiopiasalarycalculator.netlify.app"
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": "Tax Calculator 2026",
-                  "item": "https://ethiopiansalarycalculator.vercel.app"
+                  "item": "https://ethiopiasalarycalculator.netlify.app"
                 }
               ]
             })

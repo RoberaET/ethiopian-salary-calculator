@@ -6,8 +6,8 @@ export default function JsonLd() {
         '@graph': [
             {
                 '@type': 'WebSite',
-                '@id': 'https://ethiopiansalarycalculator.com/#website',
-                'url': 'https://ethiopiansalarycalculator.com',
+                '@id': 'https://ethiopiasalarycalculator.netlify.app/#website',
+                'url': 'https://ethiopiasalarycalculator.netlify.app',
                 'name': 'Ethiopian Salary Calculator',
                 'alternateName': ['ESC', 'Ethiopian Tax Calculator'],
                 'publisher': {
@@ -37,7 +37,7 @@ export default function JsonLd() {
                 },
                 'mainEntityOfPage': {
                     '@type': 'WebPage',
-                    '@id': 'https://ethiopiansalarycalculator.com'
+                    '@id': 'https://ethiopiasalarycalculator.netlify.app'
                 }
             }
         ]

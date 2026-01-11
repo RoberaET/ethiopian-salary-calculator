@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/private/',
         },
-        sitemap: 'https://ethiopiansalarycalculator.com/sitemap.xml',
+        sitemap: 'https://ethiopiasalarycalculator.netlify.app/sitemap.xml',
     }
 }

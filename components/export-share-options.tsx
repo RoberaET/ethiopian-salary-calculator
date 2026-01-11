@@ -284,7 +284,7 @@ ${isAmharic ? "በ Robera Mekonnen የተሰላ" : "Calculated by Robera Mekonne
               </div>
             <div class="footer-bar">
               <div>${isAmharic ? "የሂሳብ ቀን" : "Calculated on"}: ${new Date().toLocaleDateString()}</div>
-              <div>${isAmharic ? "ድህረ ገጽ" : "Site"}: https://ethiopiansalarycalculator.vercel.app/</div>
+              <div>${isAmharic ? "ድህረ ገጽ" : "Site"}: https://ethiopiasalarycalculator.netlify.app/</div>
             </div>
           </div>
 
