@@ -109,6 +109,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+        <meta name="google-site-verification" content="WGR5bwWnV9ZZsv5nznim2JgYQiX3cMJv1MzVRp51Wpo" />
         <meta property="og:title" content="Ethiopian Salary Calculator 2026 - Free Tax & Net Pay" />
         <meta property="og:description" content="Calculate your Ethiopian net salary, income tax, and pension using current tax brackets." />
 
